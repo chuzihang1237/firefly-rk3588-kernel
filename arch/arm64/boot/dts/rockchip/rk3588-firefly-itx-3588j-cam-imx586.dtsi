@@ -1,0 +1,169 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+&i2c3 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c3m0_xfer>;
+
+	IMX586: IMX586@1a{
+		status = "okay";
+		compatible = "sony,imx586";
+		reg = <0x1a>;
+		clocks = <&cru CLK_MIPI_CAMARAOUT_M3>;
+		clock-names = "xvclk";
+		pinctrl-names = "default";
+		pinctrl-0 = <&mipim0_camera3_clk>;
+		power-domains = <&power RK3588_PD_VI>;
+
+                reset-gpios = <&gpio1 RK_PB0 GPIO_ACTIVE_HIGH>;
+                //pwdn-gpios = <&gpio1 RK_PA7 GPIO_ACTIVE_HIGH>;
+		//eeprom-ctrl = <&otp_eeprom>;
+
+		rockchip,camera-module-index = <0>;
+		rockchip,camera-module-facing = "front";
+		rockchip,camera-module-name = "default";
+		rockchip,camera-module-lens-name = "default";
+
+		port {
+			imx586_out: endpoint {
+				remote-endpoint = <&mipidphy0_in_ucam2>;
+				data-lanes = <1 2 3 4>;
+			};
+		};
+	};
+	
+	otp_eeprom: otp_eeprom@50 {
+		compatible = "rk,otp_eeprom";
+		status = "disabled";
+		reg = <0x50>;
+	};
+
+};
+
+&csi2_dphy0_hw {
+	status = "okay";
+};
+
+&csi2_dphy0 {
+	status = "okay";
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		port@0 {
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			mipidphy0_in_ucam2: endpoint@2 {
+				reg = <2>;
+				remote-endpoint = <&imx586_out>;
+				data-lanes = <1 2 3 4>;
+			};
+		};
+		port@1 {
+			reg = <1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			csidphy0_out: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&mipi2_csi2_input>;
+			};
+		};
+	};
+};
+
+&mipi2_csi2 {
+	status = "okay";
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		port@0 {
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			mipi2_csi2_input: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&csidphy0_out>;
+			};
+		};
+
+		port@1 {
+			reg = <1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			mipi2_csi2_output: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&cif_mipi2_in0>;
+			};
+		};
+	};
+};
+
+&rkcif_mipi_lvds2 {
+	status = "okay";
+	port {
+		cif_mipi2_in0: endpoint {
+			remote-endpoint = <&mipi2_csi2_output>;
+		};
+	};
+};
+
+&rkcif_mipi_lvds2_sditf {
+	status = "okay";
+	port {
+		mipi_lvds2_sditf: endpoint {
+			remote-endpoint = <&isp0_vir0>;
+		};	
+	};
+};
+
+#if 0
+&rkisp0 {
+	status = "okay";
+};
+
+&isp0_mmu {
+	status = "okay";
+};
+
+#else //sensor分辨率大于16M(4672x3504)需要2个isp合成处理
+/* dual isp case need width 32 align， height 8 align */
+&rkisp_unite_mmu {
+        status = "okay";
+};
+
+&rkisp_unite {
+        status = "okay";
+};
+
+&rkisp0_vir0 {
+        status = "okay";
+        rockchip,hw = <&rkisp_unite>;
+};
+#endif
+
+&rkisp0_vir0 {
+	status = "okay";
+	port {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		isp0_vir0: endpoint@0 {
+			reg = <0>;
+			remote-endpoint = <&mipi_lvds2_sditf>;
+		};
+	};
+};
+
+&rkcif {
+	status = "okay";
+};
+
+&rkcif_mmu {
+	status = "okay";
+};
+
+

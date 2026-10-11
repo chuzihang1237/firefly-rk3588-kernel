@@ -1,0 +1,211 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+#include <dt-bindings/leds/common.h>
+#include "rk3588-firefly-common.dtsi"
+
+/ {
+#ifdef FF_UID_LED
+    firefly_leds: leds {
+		compatible = "gpio-leds";
+		pinctrl-names = "default";
+		pinctrl-0 =<&led_power &led_user>;
+		status = "okay";
+		power_led: power {
+			label = ":power_green"; //green led
+                        linux,default-trigger = "ir-power-click";
+			gpios = <&gpio1 RK_PA1 GPIO_ACTIVE_HIGH>;//L led
+			default-state = "on";
+		};
+
+		user_led: user {
+			label = ":user_red"; //red led
+                        linux,default-trigger = "ir-user-click";
+			gpios = <&gpio1 RK_PA0 GPIO_ACTIVE_HIGH>; //R led
+			default-state = "off";
+		};
+	};
+#endif
+
+#ifdef FF_POSITION
+    position {
+        status = "okay";
+        compatible = "firefly,detect-position-gpio";
+        A3-gpio = <&gpio0 RK_PD5 GPIO_ACTIVE_HIGH>;  // gpio29
+        A2-gpio = <&gpio0 RK_PD4 GPIO_ACTIVE_HIGH>;  // gpio28
+        A1-gpio = <&gpio4 RK_PB0 GPIO_ACTIVE_HIGH>;  // gpio136
+        A0-gpio = <&gpio4 RK_PB1 GPIO_ACTIVE_HIGH>;  // gpio137
+        B6-gpio = <&gpio1 RK_PB2 GPIO_ACTIVE_HIGH>;  // gpio42
+        B5-gpio = <&gpio1 RK_PB3 GPIO_ACTIVE_HIGH>;  // gpio43
+        B4-gpio = <&gpio1 RK_PB1 GPIO_ACTIVE_HIGH>;  // gpio41
+        B3-gpio = <&gpio1 RK_PD1 GPIO_ACTIVE_HIGH>;  // gpio57
+        B2-gpio = <&gpio1 RK_PD2 GPIO_ACTIVE_HIGH>;  // gpio58
+        B1-gpio = <&gpio1 RK_PD0 GPIO_ACTIVE_HIGH>;  // gpio56
+        B0-gpio = <&gpio1 RK_PD3 GPIO_ACTIVE_HIGH>;  // gpio59
+        pinctrl-names = "default";
+        pinctrl-0 = <&firefly_position_pins>;
+    };
+#endif
+};
+
+&fiq_debugger{
+    rockchip,baudrate = <115200>; 
+    pinctrl-0 = <&uart2m0_xfer>;
+};
+
+#ifdef FF_GMAC1
+&gmac1 {
+	status = "okay";
+	snps,reset-gpio = <&gpio4 RK_PB5 GPIO_ACTIVE_LOW>;
+	tx_delay = <0x3f>;
+	//rx_delay = <0x4f>;
+};
+#endif
+
+#ifdef FF_PCIE2_1L2
+&vcc3v3_pcie20_1l2 {
+		status = "okay";
+		gpio = <&gpio0 RK_PD3 GPIO_ACTIVE_HIGH>;
+};
+
+&combphy0_ps {
+	status = "okay";
+};
+
+&pcie2x1l2 {
+	status = "okay";
+	reset-gpios = <&gpio3 RK_PB2 GPIO_ACTIVE_HIGH>;
+	vpcie3v3-supply = <&vcc3v3_pcie20_1l2>;
+};
+#endif
+
+#ifdef FF_TYPEC_USB20_ONLY
+&u2phy0{
+    status = "okay";
+};
+
+&u2phy0_otg {
+    rockchip,sel-pipe-phystatus;
+    rockchip,dis-u2-susphy;
+    status = "okay";
+};
+
+&usbdp_phy0 {
+    status = "disabled";
+};
+
+&usbdp_phy0_dp {
+    status = "disabled";
+};
+
+&usbdp_phy0_u3 {
+    status = "disabled";
+};
+
+&usbdrd_dwc3_0 {
+    status = "okay";
+    dr_mode = "peripheral";
+    phys = <&u2phy0_otg>;
+    phy-names = "usb2-phy";
+    maximum-speed = "high-speed";
+    snps,dis_u2_susphy_quirk;
+};
+
+&usbdrd3_0{
+    status = "okay";
+};
+#endif
+
+#ifdef FF_RTC
+&i2c0 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&i2c0m2_xfer>;
+
+    pcf8563: pcf8563@51 {
+        status = "okay";
+        compatible = "nxp,pcf8563";
+        reg = <0x51>;
+        #clock-cells = <0>;
+        clock-frequency = <32768>;
+        clock-output-names = "pcf8563-clkout";
+        pinctrl-names = "default";
+        pinctrl-0 = <&pcf8563_int>;
+        interrupt-parent = <&gpio0>;
+        interrupts = <RK_PB0 IRQ_TYPE_LEVEL_LOW>;
+        // wakeup-source;
+    };
+};
+#endif
+
+#ifdef FF_WATCHDOG
+// bmc bottom plate watch
+&i2c3 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&i2c3m2_xfer>;
+	status = "okay";
+	base_pc9202: pc9202@3c {
+		status = "okay";
+		compatible = "firefly,pc9202";
+		reg = <0x3c>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&base_pc9202_en_pin>;
+		wd-en-gpio = <&gpio3 RK_PA6 GPIO_ACTIVE_HIGH>;
+	};
+};
+#endif
+
+&pinctrl {
+#ifdef FF_UID_LED
+    leds {
+		led_power: led-power {
+			/* led_power */
+			rockchip,pins = <1 RK_PA1 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		led_user: led-user {
+			/* led_user */
+			rockchip,pins = <1 RK_PA0 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+#endif
+
+#ifdef FF_RTC
+    pcf8563 {
+        pcf8563_int: pcf8563-int {
+            rockchip,pins = <0 RK_PB0 RK_FUNC_GPIO &pcfg_pull_up>;
+        };
+    };
+#endif
+
+#ifdef FF_WATCHDOG
+    wdt-en {
+		base_pc9202_en_pin: base-pc9202-en-pin {
+			rockchip,pins = <3 RK_PA6 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+    };
+#endif
+
+#ifdef FF_POSITION
+    position_b1 {
+        firefly_position_pins: firefly-position-pins {
+            rockchip,pins =
+                <0 RK_PD5 RK_FUNC_GPIO &pcfg_pull_up>,  // A3
+                <0 RK_PD4 RK_FUNC_GPIO &pcfg_pull_up>,  // A2
+                <4 RK_PB0 RK_FUNC_GPIO &pcfg_pull_up>,  // A1
+                <4 RK_PB1 RK_FUNC_GPIO &pcfg_pull_up>,  // A0
+                <1 RK_PB2 RK_FUNC_GPIO &pcfg_pull_up>,  // B6
+                <1 RK_PB3 RK_FUNC_GPIO &pcfg_pull_up>,  // B5
+                <1 RK_PB1 RK_FUNC_GPIO &pcfg_pull_up>,  // B4
+                <1 RK_PD1 RK_FUNC_GPIO &pcfg_pull_up>,  // B3
+                <1 RK_PD2 RK_FUNC_GPIO &pcfg_pull_up>,  // B2
+                <1 RK_PD0 RK_FUNC_GPIO &pcfg_pull_up>,  // B1
+                <1 RK_PD3 RK_FUNC_GPIO &pcfg_pull_up>;  // B0
+        };
+    };
+#endif
+};

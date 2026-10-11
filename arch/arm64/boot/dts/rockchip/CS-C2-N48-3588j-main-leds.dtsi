@@ -1,0 +1,1797 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/ {
+    firefly_leds: leds {
+        compatible = "gpio-leds";
+        status = "okay";
+        
+        power_led: power {
+            gpios = <&gpio3 RK_PC4 GPIO_ACTIVE_LOW>;//green led
+            default-state = "on";
+        };
+        
+#ifdef FF_POWER
+        POWER_ON {
+            label = "POWER_ON";
+            gpios = <&gpio0 RK_PC6 GPIO_ACTIVE_HIGH>;
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        SWITCH_PWR_EN {
+            label = "SWITCH_PWR_EN";
+            gpios = <&gpio4 RK_PA2 GPIO_ACTIVE_LOW>;
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        SWITCH_PWR_RESET {
+            label = "SWITCH_PWR_RESET";
+            gpios = <&gpio4 RK_PA1 GPIO_ACTIVE_HIGH>;
+            default-state = "off";
+            retain-state-shutdown;
+		};
+
+        // bmc usb20 hub vcc en
+        USB20_HUB_EN {
+            label = "USB20_HUB_EN";
+            gpios = <&gpio3 RK_PD1 GPIO_ACTIVE_HIGH>;
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        // bmc usb30 bottom vcc en
+        VCC5V0_HOST0_EN {
+            label = "VCC5V0_HOST0_EN";
+            gpios = <&gpio3 RK_PB2 GPIO_ACTIVE_HIGH>;
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        // bmc usb30 top vcc en
+        VCC5V0_HOST1_EN {
+            label = "VCC5V0_HOST1_EN";
+            gpios = <&gpio4 RK_PB7 GPIO_ACTIVE_HIGH>;
+            default-state = "on";
+            retain-state-shutdown;
+        };
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB1)
+        CB1_USB20_HUB_EN {
+            label = "CB1_USB20_HUB_EN";
+            gpios = <&XL9555_CB1 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U21 USB20_HUB_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB1_3V3_PWR_EN {
+            label = "CB1_SUB1_3V3_PWR_EN";
+            gpios = <&XL9555_CB1 PCA_IO0_3 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U21 SUB_PWR_EN1
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB2_3V3_PWR_EN {
+            label = "CB1_SUB2_3V3_PWR_EN";
+            gpios = <&XL9555_CB1 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U21 SUB_PWR_EN2
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB3_3V3_PWR_EN {
+            label = "CB1_SUB3_3V3_PWR_EN";
+            gpios = <&XL9555_CB1 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U21 SUB_PWR_EN3
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB4_3V3_PWR_EN {
+            label = "CB1_SUB4_3V3_PWR_EN";
+            gpios = <&XL9555_CB1 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U21 SUB_PWR_EN4
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB_UART_SW1 {
+            label = "CB1_SUB_UART_SW1";
+            gpios = <&XL9555_CB1 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U21 SUB_UART_SW1
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB_UART_SW2 {
+            label = "CB1_SUB_UART_SW2";
+            gpios = <&XL9555_CB1 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U21 SUB_UART_SW2
+            default-state = "on";
+            retain-state-shutdown;
+        };  
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB1) && defined(FF_XL9555_CB1_SUB1)
+        /*----------------------------------------------------------CB1 SUB1 CORE----------------------------------------------------------*/
+        /* CB1 SUB1 CORE_SYS_EN */
+        CB1_SUB1_CORE1_SYS_EN {
+            label = "CB1_SUB1_CORE1_SYS_EN";
+            gpios = <&XL9555_CB1_SUB1 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U10 SUB_U40 CORE1_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB1_CORE2_SYS_EN {
+            label = "CB1_SUB1_CORE2_SYS_EN";
+            gpios = <&XL9555_CB1_SUB1 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U10 SUB_U40 CORE2_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB1_CORE3_SYS_EN {
+            label = "CB1_SUB1_CORE3_SYS_EN";
+            gpios = <&XL9555_CB1_SUB1 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U10 SUB_U40 CORE3_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        /* CB1 SUB1 CORE_MASKROM*/
+        CB1_SUB1_CORE1_MASKROM {
+            label = "CB1_SUB1_CORE1_MASKROM";
+            gpios = <&XL9555_CB1_SUB1 PCA_IO0_6 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U10 SUB_U40 CORE1_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB1_CORE2_MASKROM {
+            label = "CB1_SUB1_CORE2_MASKROM";
+            gpios = <&XL9555_CB1_SUB1 PCA_IO0_7 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U10 SUB_U40 CORE2_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB1_CORE3_MASKROM {
+            label = "CB1_SUB1_CORE3_MASKROM";
+            gpios = <&XL9555_CB1_SUB1 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U10 SUB_U40 CORE3_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        /* CB1 SUB1 CORE_RESET*/
+        CB1_SUB1_CORE1_RESET {
+            label = "CB1_SUB1_CORE1_RESET";
+            gpios = <&XL9555_CB1_SUB1 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U10 SUB_U40 CORE1_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB1_CORE2_RESET {
+            label = "CB1_SUB1_CORE2_RESET";
+            gpios = <&XL9555_CB1_SUB1 PCA_IO1_2 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U10 SUB_U40 CORE2_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB1_CORE3_RESET {
+            label = "CB1_SUB1_CORE3_RESET";
+            gpios = <&XL9555_CB1_SUB1 PCA_IO1_3 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U10 SUB_U40 CORE3_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        // watchdog
+        CB1_SUB1_WD_PWR_EN {
+            label = "CB1_SUB1_WD_PWR_EN";
+            gpios = <&XL9555_CB1_SUB1 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U10 SUB_U40 WD_PWR_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB1_UART_ADD_A {
+            label = "CB1_SUB1_UART_ADD_A";
+            gpios = <&XL9555_CB1_SUB1 PCA_IO1_4 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U10 SUB_U40 UART_ADD_A
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB1_UART_ADD_B {
+            label = "CB1_SUB1_UART_ADD_B";
+            gpios = <&XL9555_CB1_SUB1 PCA_IO1_5 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U10 SUB_U40 UART_ADD_B
+            default-state = "on";
+            retain-state-shutdown;
+        };
+        /*----------------------------------------------------------CB1 SUB1 CORE END----------------------------------------------------------*/
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB1) && defined(FF_XL9555_CB1_SUB2)
+        /*----------------------------------------------------------CB1 SUB2 CORE----------------------------------------------------------*/
+        /* CB1 SUB2 CORE_SYS_EN */
+        CB1_SUB2_CORE1_SYS_EN {
+            label = "CB1_SUB2_CORE1_SYS_EN";
+            gpios = <&XL9555_CB1_SUB2 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U13 SUB_U40 CORE1_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB2_CORE2_SYS_EN {
+            label = "CB1_SUB2_CORE2_SYS_EN";
+            gpios = <&XL9555_CB1_SUB2 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U13 SUB_U40 CORE2_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB2_CORE3_SYS_EN {
+            label = "CB1_SUB2_CORE3_SYS_EN";
+            gpios = <&XL9555_CB1_SUB2 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U13 SUB_U40 CORE3_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        /* CB1 SUB2 CORE_MASKROM*/
+        CB1_SUB2_CORE1_MASKROM {
+            label = "CB1_SUB2_CORE1_MASKROM";
+            gpios = <&XL9555_CB1_SUB2 PCA_IO0_6 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U13 SUB_U40 CORE1_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB2_CORE2_MASKROM {
+            label = "CB1_SUB2_CORE2_MASKROM";
+            gpios = <&XL9555_CB1_SUB2 PCA_IO0_7 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U13 SUB_U40 CORE2_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB2_CORE3_MASKROM {
+            label = "CB1_SUB2_CORE3_MASKROM";
+            gpios = <&XL9555_CB1_SUB2 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U13 SUB_U40 CORE3_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        /* CB1 SUB2 CORE_RESET*/
+        CB1_SUB2_CORE1_RESET {
+            label = "CB1_SUB2_CORE1_RESET";
+            gpios = <&XL9555_CB1_SUB2 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U13 SUB_U40 CORE1_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB2_CORE2_RESET {
+            label = "CB1_SUB2_CORE2_RESET";
+            gpios = <&XL9555_CB1_SUB2 PCA_IO1_2 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U13 SUB_U40 CORE2_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB2_CORE3_RESET {
+            label = "CB1_SUB2_CORE3_RESET";
+            gpios = <&XL9555_CB1_SUB2 PCA_IO1_3 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U13 SUB_U40 CORE3_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        // watchdog
+        CB1_SUB2_WD_PWR_EN {
+            label = "CB1_SUB2_WD_PWR_EN";
+            gpios = <&XL9555_CB1_SUB2 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U13 SUB_U40 WD_PWR_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB2_UART_ADD_A {
+            label = "CB1_SUB2_UART_ADD_A";
+            gpios = <&XL9555_CB1_SUB2 PCA_IO1_4 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U13 SUB_U40 UART_ADD_A
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB2_UART_ADD_B {
+            label = "CB1_SUB2_UART_ADD_B";
+            gpios = <&XL9555_CB1_SUB2 PCA_IO1_5 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U13 SUB_U40 UART_ADD_B
+            default-state = "on";
+            retain-state-shutdown;
+        };
+        /*----------------------------------------------------------CB1 SUB2 CORE END----------------------------------------------------------*/
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB1) && defined(FF_XL9555_CB1_SUB3)
+        /*----------------------------------------------------------CB1 SUB3 CORE----------------------------------------------------------*/
+        /* CB1 SUB3 CORE_SYS_EN */
+        CB1_SUB3_CORE1_SYS_EN {
+            label = "CB1_SUB3_CORE1_SYS_EN";
+            gpios = <&XL9555_CB1_SUB3 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U16 SUB_U40 CORE1_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB3_CORE2_SYS_EN {
+            label = "CB1_SUB3_CORE2_SYS_EN";
+            gpios = <&XL9555_CB1_SUB3 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U16 SUB_U40 CORE2_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB3_CORE3_SYS_EN {
+            label = "CB1_SUB3_CORE3_SYS_EN";
+            gpios = <&XL9555_CB1_SUB3 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U16 SUB_U40 CORE3_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        /* CB1 SUB3 CORE_MASKROM*/
+        CB1_SUB3_CORE1_MASKROM {
+            label = "CB1_SUB3_CORE1_MASKROM";
+            gpios = <&XL9555_CB1_SUB3 PCA_IO0_6 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U16 SUB_U40 CORE1_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB3_CORE2_MASKROM {
+            label = "CB1_SUB3_CORE2_MASKROM";
+            gpios = <&XL9555_CB1_SUB3 PCA_IO0_7 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U16 SUB_U40 CORE2_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB3_CORE3_MASKROM {
+            label = "CB1_SUB3_CORE3_MASKROM";
+            gpios = <&XL9555_CB1_SUB3 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U16 SUB_U40 CORE3_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        /* CB1 SUB3 CORE_RESET*/
+        CB1_SUB3_CORE1_RESET {
+            label = "CB1_SUB3_CORE1_RESET";
+            gpios = <&XL9555_CB1_SUB3 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U16 SUB_U40 CORE1_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB3_CORE2_RESET {
+            label = "CB1_SUB3_CORE2_RESET";
+            gpios = <&XL9555_CB1_SUB3 PCA_IO1_2 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U16 SUB_U40 CORE2_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB3_CORE3_RESET {
+            label = "CB1_SUB3_CORE3_RESET";
+            gpios = <&XL9555_CB1_SUB3 PCA_IO1_3 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U16 SUB_U40 CORE3_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        // watchdog
+        CB1_SUB3_WD_PWR_EN {
+            label = "CB1_SUB3_WD_PWR_EN";
+            gpios = <&XL9555_CB1_SUB3 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U16 SUB_U40 WD_PWR_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB3_UART_ADD_A {
+            label = "CB1_SUB3_UART_ADD_A";
+            gpios = <&XL9555_CB1_SUB3 PCA_IO1_4 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U16 SUB_U40 UART_ADD_A
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB3_UART_ADD_B {
+            label = "CB1_SUB3_UART_ADD_B";
+            gpios = <&XL9555_CB1_SUB3 PCA_IO1_5 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U16 SUB_U40 UART_ADD_B
+            default-state = "on";
+            retain-state-shutdown;
+        };
+        /*----------------------------------------------------------CB1 SUB3 CORE END----------------------------------------------------------*/
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB1) && defined(FF_XL9555_CB1_SUB4)
+        /*----------------------------------------------------------CB1 SUB4 CORE----------------------------------------------------------*/
+        /* CB1 SUB4 CORE_SYS_EN */
+        CB1_SUB4_CORE1_SYS_EN {
+            label = "CB1_SUB4_CORE1_SYS_EN";
+            gpios = <&XL9555_CB1_SUB4 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U19 SUB_U40 CORE1_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB4_CORE2_SYS_EN {
+            label = "CB1_SUB4_CORE2_SYS_EN";
+            gpios = <&XL9555_CB1_SUB4 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U19 SUB_U40 CORE2_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB4_CORE3_SYS_EN {
+            label = "CB1_SUB4_CORE3_SYS_EN";
+            gpios = <&XL9555_CB1_SUB4 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U19 SUB_U40 CORE3_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        /* CB1 SUB4 CORE_MASKROM*/
+        CB1_SUB4_CORE1_MASKROM {
+            label = "CB1_SUB4_CORE1_MASKROM";
+            gpios = <&XL9555_CB1_SUB4 PCA_IO0_6 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U19 SUB_U40 CORE1_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB4_CORE2_MASKROM {
+            label = "CB1_SUB4_CORE2_MASKROM";
+            gpios = <&XL9555_CB1_SUB4 PCA_IO0_7 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U19 SUB_U40 CORE2_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB4_CORE3_MASKROM {
+            label = "CB1_SUB4_CORE3_MASKROM";
+            gpios = <&XL9555_CB1_SUB4 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U19 SUB_U40 CORE3_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        /* CB1 SUB4 CORE_RESET*/
+        CB1_SUB4_CORE1_RESET {
+            label = "CB1_SUB4_CORE1_RESET";
+            gpios = <&XL9555_CB1_SUB4 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U19 SUB_U40 CORE1_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB4_CORE2_RESET {
+            label = "CB1_SUB4_CORE2_RESET";
+            gpios = <&XL9555_CB1_SUB4 PCA_IO1_2 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U19 SUB_U40 CORE2_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB4_CORE3_RESET {
+            label = "CB1_SUB4_CORE3_RESET";
+            gpios = <&XL9555_CB1_SUB4 PCA_IO1_3 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U19 SUB_U40 CORE3_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        // watchdog
+        CB1_SUB4_WD_PWR_EN {
+            label = "CB1_SUB4_WD_PWR_EN";
+            gpios = <&XL9555_CB1_SUB4 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U19 SUB_U40 WD_PWR_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB4_UART_ADD_A {
+            label = "CB1_SUB4_UART_ADD_A";
+            gpios = <&XL9555_CB1_SUB4 PCA_IO1_4 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U19 SUB_U40 UART_ADD_A
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB1_SUB4_UART_ADD_B {
+            label = "CB1_SUB4_UART_ADD_B";
+            gpios = <&XL9555_CB1_SUB4 PCA_IO1_5 GPIO_ACTIVE_HIGH>; // BMC_U10 CB_U19 SUB_U40 UART_ADD_B
+            default-state = "on";
+            retain-state-shutdown;
+        };
+        /*----------------------------------------------------------CB1 SUB4 CORE END----------------------------------------------------------*/
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB2)
+        CB2_USB20_HUB_EN {
+            label = "CB2_USB20_HUB_EN";
+            gpios = <&XL9555_CB2 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U21 USB20_HUB_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB1_3V3_PWR_EN {
+            label = "CB2_SUB1_3V3_PWR_EN";
+            gpios = <&XL9555_CB2 PCA_IO0_3 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U21 SUB_PWR_EN1
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB2_3V3_PWR_EN {
+            label = "CB2_SUB2_3V3_PWR_EN";
+            gpios = <&XL9555_CB2 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U21 SUB_PWR_EN2
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB3_3V3_PWR_EN {
+            label = "CB2_SUB3_3V3_PWR_EN";
+            gpios = <&XL9555_CB2 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U21 SUB_PWR_EN3
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB4_3V3_PWR_EN {
+            label = "CB2_SUB4_3V3_PWR_EN";
+            gpios = <&XL9555_CB2 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U21 SUB_PWR_EN4
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB_UART_SW1 {
+            label = "CB2_SUB_UART_SW1";
+            gpios = <&XL9555_CB2 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U21 SUB_UART_SW1
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB_UART_SW2 {
+            label = "CB2_SUB_UART_SW2";
+            gpios = <&XL9555_CB2 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U21 SUB_UART_SW2
+            default-state = "on";
+            retain-state-shutdown;
+        };
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB2) && defined(FF_XL9555_CB2_SUB1)
+        /*----------------------------------------------------------CB2 SUB1 CORE----------------------------------------------------------*/
+        /* CB2 SUB1 CORE_SYS_EN */
+        CB2_SUB1_CORE1_SYS_EN {
+            label = "CB2_SUB1_CORE1_SYS_EN";
+            gpios = <&XL9555_CB2_SUB1 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U10 SUB_U40 CORE1_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB1_CORE2_SYS_EN {
+            label = "CB2_SUB1_CORE2_SYS_EN";
+            gpios = <&XL9555_CB2_SUB1 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U10 SUB_U40 CORE2_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB1_CORE3_SYS_EN {
+            label = "CB2_SUB1_CORE3_SYS_EN";
+            gpios = <&XL9555_CB2_SUB1 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U10 SUB_U40 CORE3_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        /* CB2 SUB1 CORE_MASKROM*/
+        CB2_SUB1_CORE1_MASKROM {
+            label = "CB2_SUB1_CORE1_MASKROM";
+            gpios = <&XL9555_CB2_SUB1 PCA_IO0_6 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U10 SUB_U40 CORE1_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB1_CORE2_MASKROM {
+            label = "CB2_SUB1_CORE2_MASKROM";
+            gpios = <&XL9555_CB2_SUB1 PCA_IO0_7 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U10 SUB_U40 CORE2_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB1_CORE3_MASKROM {
+            label = "CB2_SUB1_CORE3_MASKROM";
+            gpios = <&XL9555_CB2_SUB1 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U10 SUB_U40 CORE3_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        /* CB2 SUB1 CORE_RESET*/
+        CB2_SUB1_CORE1_RESET {
+            label = "CB2_SUB1_CORE1_RESET";
+            gpios = <&XL9555_CB2_SUB1 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U10 SUB_U40 CORE1_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB1_CORE2_RESET {
+            label = "CB2_SUB1_CORE2_RESET";
+            gpios = <&XL9555_CB2_SUB1 PCA_IO1_2 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U10 SUB_U40 CORE2_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB1_CORE3_RESET {
+            label = "CB2_SUB1_CORE3_RESET";
+            gpios = <&XL9555_CB2_SUB1 PCA_IO1_3 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U10 SUB_U40 CORE3_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        // watchdog
+        CB2_SUB1_WD_PWR_EN {
+            label = "CB2_SUB1_WD_PWR_EN";
+            gpios = <&XL9555_CB2_SUB1 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U10 SUB_U40 WD_PWR_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB1_UART_ADD_A {
+            label = "CB2_SUB1_UART_ADD_A";
+            gpios = <&XL9555_CB2_SUB1 PCA_IO1_4 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U10 SUB_U40 UART_ADD_A
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB1_UART_ADD_B {
+            label = "CB2_SUB1_UART_ADD_B";
+            gpios = <&XL9555_CB2_SUB1 PCA_IO1_5 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U10 SUB_U40 UART_ADD_B
+            default-state = "on";
+            retain-state-shutdown;
+        };
+        /*----------------------------------------------------------CB2 SUB1 CORE END----------------------------------------------------------*/
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB2) && defined(FF_XL9555_CB2_SUB2)
+        /*----------------------------------------------------------CB2 SUB2 CORE----------------------------------------------------------*/
+        /* CB2 SUB2 CORE_SYS_EN */
+        CB2_SUB2_CORE1_SYS_EN {
+            label = "CB2_SUB2_CORE1_SYS_EN";
+            gpios = <&XL9555_CB2_SUB2 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U13 SUB_U40 CORE1_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB2_CORE2_SYS_EN {
+            label = "CB2_SUB2_CORE2_SYS_EN";
+            gpios = <&XL9555_CB2_SUB2 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U13 SUB_U40 CORE2_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB2_CORE3_SYS_EN {
+            label = "CB2_SUB2_CORE3_SYS_EN";
+            gpios = <&XL9555_CB2_SUB2 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U13 SUB_U40 CORE3_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        /* CB2 SUB2 CORE_MASKROM*/
+        CB2_SUB2_CORE1_MASKROM {
+            label = "CB2_SUB2_CORE1_MASKROM";
+            gpios = <&XL9555_CB2_SUB2 PCA_IO0_6 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U13 SUB_U40 CORE1_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB2_CORE2_MASKROM {
+            label = "CB2_SUB2_CORE2_MASKROM";
+            gpios = <&XL9555_CB2_SUB2 PCA_IO0_7 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U13 SUB_U40 CORE2_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB2_CORE3_MASKROM {
+            label = "CB2_SUB2_CORE3_MASKROM";
+            gpios = <&XL9555_CB2_SUB2 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U13 SUB_U40 CORE3_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        /* CB2 SUB2 CORE_RESET*/
+        CB2_SUB2_CORE1_RESET {
+            label = "CB2_SUB2_CORE1_RESET";
+            gpios = <&XL9555_CB2_SUB2 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U13 SUB_U40 CORE1_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB2_CORE2_RESET {
+            label = "CB2_SUB2_CORE2_RESET";
+            gpios = <&XL9555_CB2_SUB2 PCA_IO1_2 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U13 SUB_U40 CORE2_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB2_CORE3_RESET {
+            label = "CB2_SUB2_CORE3_RESET";
+            gpios = <&XL9555_CB2_SUB2 PCA_IO1_3 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U13 SUB_U40 CORE3_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        // watchdog
+        CB2_SUB2_WD_PWR_EN {
+            label = "CB2_SUB2_WD_PWR_EN";
+            gpios = <&XL9555_CB2_SUB2 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U13 SUB_U40 WD_PWR_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB2_UART_ADD_A {
+            label = "CB2_SUB2_UART_ADD_A";
+            gpios = <&XL9555_CB2_SUB2 PCA_IO1_4 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U13 SUB_U40 UART_ADD_A
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB2_UART_ADD_B {
+            label = "CB2_SUB2_UART_ADD_B";
+            gpios = <&XL9555_CB2_SUB2 PCA_IO1_5 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U13 SUB_U40 UART_ADD_B
+            default-state = "on";
+            retain-state-shutdown;
+        };
+        /*----------------------------------------------------------CB2 SUB2 CORE END----------------------------------------------------------*/
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB2) && defined(FF_XL9555_CB2_SUB3)
+        /*----------------------------------------------------------CB2 SUB3 CORE----------------------------------------------------------*/
+        /* CB2 SUB3 CORE_SYS_EN */
+        CB2_SUB3_CORE1_SYS_EN {
+            label = "CB2_SUB3_CORE1_SYS_EN";
+            gpios = <&XL9555_CB2_SUB3 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U16 SUB_U40 CORE1_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB3_CORE2_SYS_EN {
+            label = "CB2_SUB3_CORE2_SYS_EN";
+            gpios = <&XL9555_CB2_SUB3 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U16 SUB_U40 CORE2_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB3_CORE3_SYS_EN {
+            label = "CB2_SUB3_CORE3_SYS_EN";
+            gpios = <&XL9555_CB2_SUB3 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U16 SUB_U40 CORE3_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        /* CB2 SUB3 CORE_MASKROM*/
+        CB2_SUB3_CORE1_MASKROM {
+            label = "CB2_SUB3_CORE1_MASKROM";
+            gpios = <&XL9555_CB2_SUB3 PCA_IO0_6 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U16 SUB_U40 CORE1_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB3_CORE2_MASKROM {
+            label = "CB2_SUB3_CORE2_MASKROM";
+            gpios = <&XL9555_CB2_SUB3 PCA_IO0_7 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U16 SUB_U40 CORE2_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB3_CORE3_MASKROM {
+            label = "CB2_SUB3_CORE3_MASKROM";
+            gpios = <&XL9555_CB2_SUB3 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U16 SUB_U40 CORE3_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        /* CB2 SUB3 CORE_RESET*/
+        CB2_SUB3_CORE1_RESET {
+            label = "CB2_SUB3_CORE1_RESET";
+            gpios = <&XL9555_CB2_SUB3 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U16 SUB_U40 CORE1_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB3_CORE2_RESET {
+            label = "CB2_SUB3_CORE2_RESET";
+            gpios = <&XL9555_CB2_SUB3 PCA_IO1_2 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U16 SUB_U40 CORE2_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB3_CORE3_RESET {
+            label = "CB2_SUB3_CORE3_RESET";
+            gpios = <&XL9555_CB2_SUB3 PCA_IO1_3 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U16 SUB_U40 CORE3_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        // watchdog
+        CB2_SUB3_WD_PWR_EN {
+            label = "CB2_SUB3_WD_PWR_EN";
+            gpios = <&XL9555_CB2_SUB3 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U16 SUB_U40 WD_PWR_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB3_UART_ADD_A {
+            label = "CB2_SUB3_UART_ADD_A";
+            gpios = <&XL9555_CB2_SUB3 PCA_IO1_4 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U16 SUB_U40 UART_ADD_A
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB3_UART_ADD_B {
+            label = "CB2_SUB3_UART_ADD_B";
+            gpios = <&XL9555_CB2_SUB3 PCA_IO1_5 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U16 SUB_U40 UART_ADD_B
+            default-state = "on";
+            retain-state-shutdown;
+        };
+        /*----------------------------------------------------------CB2 SUB3 CORE END----------------------------------------------------------*/
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB2) && defined(FF_XL9555_CB2_SUB4)
+        /*----------------------------------------------------------CB2 SUB4 CORE----------------------------------------------------------*/
+        /* CB2 SUB4 CORE_SYS_EN */
+        CB2_SUB4_CORE1_SYS_EN {
+            label = "CB2_SUB4_CORE1_SYS_EN";
+            gpios = <&XL9555_CB2_SUB4 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U19 SUB_U40 CORE1_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB4_CORE2_SYS_EN {
+            label = "CB2_SUB4_CORE2_SYS_EN";
+            gpios = <&XL9555_CB2_SUB4 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U19 SUB_U40 CORE2_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB4_CORE3_SYS_EN {
+            label = "CB2_SUB4_CORE3_SYS_EN";
+            gpios = <&XL9555_CB2_SUB4 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U19 SUB_U40 CORE3_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        /* CB2 SUB4 CORE_MASKROM*/
+        CB2_SUB4_CORE1_MASKROM {
+            label = "CB2_SUB4_CORE1_MASKROM";
+            gpios = <&XL9555_CB2_SUB4 PCA_IO0_6 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U19 SUB_U40 CORE1_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB4_CORE2_MASKROM {
+            label = "CB2_SUB4_CORE2_MASKROM";
+            gpios = <&XL9555_CB2_SUB4 PCA_IO0_7 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U19 SUB_U40 CORE2_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB4_CORE3_MASKROM {
+            label = "CB2_SUB4_CORE3_MASKROM";
+            gpios = <&XL9555_CB2_SUB4 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U19 SUB_U40 CORE3_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        /* CB2 SUB4 CORE_RESET*/
+        CB2_SUB4_CORE1_RESET {
+            label = "CB2_SUB4_CORE1_RESET";
+            gpios = <&XL9555_CB2_SUB4 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U19 SUB_U40 CORE1_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB4_CORE2_RESET {
+            label = "CB2_SUB4_CORE2_RESET";
+            gpios = <&XL9555_CB2_SUB4 PCA_IO1_2 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U19 SUB_U40 CORE2_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB4_CORE3_RESET {
+            label = "CB2_SUB4_CORE3_RESET";
+            gpios = <&XL9555_CB2_SUB4 PCA_IO1_3 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U19 SUB_U40 CORE3_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        // watchdog
+        CB2_SUB4_WD_PWR_EN {
+            label = "CB2_SUB4_WD_PWR_EN";
+            gpios = <&XL9555_CB2_SUB4 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U19 SUB_U40 WD_PWR_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB4_UART_ADD_A {
+            label = "CB2_SUB4_UART_ADD_A";
+            gpios = <&XL9555_CB2_SUB4 PCA_IO1_4 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U19 SUB_U40 UART_ADD_A
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB2_SUB4_UART_ADD_B {
+            label = "CB2_SUB4_UART_ADD_B";
+            gpios = <&XL9555_CB2_SUB4 PCA_IO1_5 GPIO_ACTIVE_HIGH>; // BMC_U13 CB_U19 SUB_U40 UART_ADD_B
+            default-state = "on";
+            retain-state-shutdown;
+        };
+        /*----------------------------------------------------------CB2 SUB4 CORE END----------------------------------------------------------*/
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB3)
+        CB3_USB20_HUB_EN {
+            label = "CB3_USB20_HUB_EN";
+            gpios = <&XL9555_CB3 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U21 USB20_HUB_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB1_3V3_PWR_EN {
+            label = "CB3_SUB1_3V3_PWR_EN";
+            gpios = <&XL9555_CB3 PCA_IO0_3 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U21 SUB_PWR_EN1
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB2_3V3_PWR_EN {
+            label = "CB3_SUB2_3V3_PWR_EN";
+            gpios = <&XL9555_CB3 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U21 SUB_PWR_EN2
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB3_3V3_PWR_EN {
+            label = "CB3_SUB3_3V3_PWR_EN";
+            gpios = <&XL9555_CB3 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U21 SUB_PWR_EN3
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB4_3V3_PWR_EN {
+            label = "CB3_SUB4_3V3_PWR_EN";
+            gpios = <&XL9555_CB3 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U21 SUB_PWR_EN4
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB_UART_SW1 {
+            label = "CB3_SUB_UART_SW1";
+            gpios = <&XL9555_CB3 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U21 SUB_UART_SW1
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB_UART_SW2 {
+            label = "CB3_SUB_UART_SW2";
+            gpios = <&XL9555_CB3 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U21 SUB_UART_SW2
+            default-state = "on";
+            retain-state-shutdown;
+        };
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB3) && defined(FF_XL9555_CB3_SUB1)
+        /*----------------------------------------------------------CB3 SUB1 CORE----------------------------------------------------------*/
+        /* CB3 SUB1 CORE_SYS_EN */
+        CB3_SUB1_CORE1_SYS_EN {
+            label = "CB3_SUB1_CORE1_SYS_EN";
+            gpios = <&XL9555_CB3_SUB1 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U10 SUB_U40 CORE1_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB1_CORE2_SYS_EN {
+            label = "CB3_SUB1_CORE2_SYS_EN";
+            gpios = <&XL9555_CB3_SUB1 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U10 SUB_U40 CORE2_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB1_CORE3_SYS_EN {
+            label = "CB3_SUB1_CORE3_SYS_EN";
+            gpios = <&XL9555_CB3_SUB1 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U10 SUB_U40 CORE3_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        /* CB3 SUB1 CORE_MASKROM*/
+        CB3_SUB1_CORE1_MASKROM {
+            label = "CB3_SUB1_CORE1_MASKROM";
+            gpios = <&XL9555_CB3_SUB1 PCA_IO0_6 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U10 SUB_U40 CORE1_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB1_CORE2_MASKROM {
+            label = "CB3_SUB1_CORE2_MASKROM";
+            gpios = <&XL9555_CB3_SUB1 PCA_IO0_7 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U10 SUB_U40 CORE2_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB1_CORE3_MASKROM {
+            label = "CB3_SUB1_CORE3_MASKROM";
+            gpios = <&XL9555_CB3_SUB1 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U10 SUB_U40 CORE3_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        /* CB3 SUB1 CORE_RESET*/
+        CB3_SUB1_CORE1_RESET {
+            label = "CB3_SUB1_CORE1_RESET";
+            gpios = <&XL9555_CB3_SUB1 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U10 SUB_U40 CORE1_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB1_CORE2_RESET {
+            label = "CB3_SUB1_CORE2_RESET";
+            gpios = <&XL9555_CB3_SUB1 PCA_IO1_2 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U10 SUB_U40 CORE2_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB1_CORE3_RESET {
+            label = "CB3_SUB1_CORE3_RESET";
+            gpios = <&XL9555_CB3_SUB1 PCA_IO1_3 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U10 SUB_U40 CORE3_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        // watchdog
+        CB3_SUB1_WD_PWR_EN {
+            label = "CB3_SUB1_WD_PWR_EN";
+            gpios = <&XL9555_CB3_SUB1 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U10 SUB_U40 WD_PWR_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB1_UART_ADD_A {
+            label = "CB3_SUB1_UART_ADD_A";
+            gpios = <&XL9555_CB3_SUB1 PCA_IO1_4 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U10 SUB_U40 UART_ADD_A
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB1_UART_ADD_B {
+            label = "CB3_SUB1_UART_ADD_B";
+            gpios = <&XL9555_CB3_SUB1 PCA_IO1_5 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U10 SUB_U40 UART_ADD_B
+            default-state = "on";
+            retain-state-shutdown;
+        };
+        /*----------------------------------------------------------CB3 SUB1 CORE END----------------------------------------------------------*/
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB3) && defined(FF_XL9555_CB3_SUB2)
+        /*----------------------------------------------------------CB3 SUB2 CORE----------------------------------------------------------*/
+        /* CB3 SUB2 CORE_SYS_EN */
+        CB3_SUB2_CORE1_SYS_EN {
+            label = "CB3_SUB2_CORE1_SYS_EN";
+            gpios = <&XL9555_CB3_SUB2 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U13 SUB_U40 CORE1_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB2_CORE2_SYS_EN {
+            label = "CB3_SUB2_CORE2_SYS_EN";
+            gpios = <&XL9555_CB3_SUB2 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U13 SUB_U40 CORE2_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB2_CORE3_SYS_EN {
+            label = "CB3_SUB2_CORE3_SYS_EN";
+            gpios = <&XL9555_CB3_SUB2 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U13 SUB_U40 CORE3_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        /* CB3 SUB2 CORE_MASKROM*/
+        CB3_SUB2_CORE1_MASKROM {
+            label = "CB3_SUB2_CORE1_MASKROM";
+            gpios = <&XL9555_CB3_SUB2 PCA_IO0_6 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U13 SUB_U40 CORE1_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB2_CORE2_MASKROM {
+            label = "CB3_SUB2_CORE2_MASKROM";
+            gpios = <&XL9555_CB3_SUB2 PCA_IO0_7 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U13 SUB_U40 CORE2_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB2_CORE3_MASKROM {
+            label = "CB3_SUB2_CORE3_MASKROM";
+            gpios = <&XL9555_CB3_SUB2 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U13 SUB_U40 CORE3_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        /* CB3 SUB2 CORE_RESET*/
+        CB3_SUB2_CORE1_RESET {
+            label = "CB3_SUB2_CORE1_RESET";
+            gpios = <&XL9555_CB3_SUB2 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U13 SUB_U40 CORE1_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB2_CORE2_RESET {
+            label = "CB3_SUB2_CORE2_RESET";
+            gpios = <&XL9555_CB3_SUB2 PCA_IO1_2 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U13 SUB_U40 CORE2_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB2_CORE3_RESET {
+            label = "CB3_SUB2_CORE3_RESET";
+            gpios = <&XL9555_CB3_SUB2 PCA_IO1_3 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U13 SUB_U40 CORE3_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        // watchdog
+        CB3_SUB2_WD_PWR_EN {
+            label = "CB3_SUB2_WD_PWR_EN";
+            gpios = <&XL9555_CB3_SUB2 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U13 SUB_U40 WD_PWR_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB2_UART_ADD_A {
+            label = "CB3_SUB2_UART_ADD_A";
+            gpios = <&XL9555_CB3_SUB2 PCA_IO1_4 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U13 SUB_U40 UART_ADD_A
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB2_UART_ADD_B {
+            label = "CB3_SUB2_UART_ADD_B";
+            gpios = <&XL9555_CB3_SUB2 PCA_IO1_5 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U13 SUB_U40 UART_ADD_B
+            default-state = "on";
+            retain-state-shutdown;
+        };
+        /*----------------------------------------------------------CB3 SUB2 CORE END----------------------------------------------------------*/
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB3) && defined(FF_XL9555_CB3_SUB3)
+        /*----------------------------------------------------------CB3 SUB3 CORE----------------------------------------------------------*/
+        /* CB3 SUB3 CORE_SYS_EN */
+        CB3_SUB3_CORE1_SYS_EN {
+            label = "CB3_SUB3_CORE1_SYS_EN";
+            gpios = <&XL9555_CB3_SUB3 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U16 SUB_U40 CORE1_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB3_CORE2_SYS_EN {
+            label = "CB3_SUB3_CORE2_SYS_EN";
+            gpios = <&XL9555_CB3_SUB3 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U16 SUB_U40 CORE2_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB3_CORE3_SYS_EN {
+            label = "CB3_SUB3_CORE3_SYS_EN";
+            gpios = <&XL9555_CB3_SUB3 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U16 SUB_U40 CORE3_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        /* CB3 SUB3 CORE_MASKROM*/
+        CB3_SUB3_CORE1_MASKROM {
+            label = "CB3_SUB3_CORE1_MASKROM";
+            gpios = <&XL9555_CB3_SUB3 PCA_IO0_6 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U16 SUB_U40 CORE1_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB3_CORE2_MASKROM {
+            label = "CB3_SUB3_CORE2_MASKROM";
+            gpios = <&XL9555_CB3_SUB3 PCA_IO0_7 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U16 SUB_U40 CORE2_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB3_CORE3_MASKROM {
+            label = "CB3_SUB3_CORE3_MASKROM";
+            gpios = <&XL9555_CB3_SUB3 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U16 SUB_U40 CORE3_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        /* CB3 SUB3 CORE_RESET*/
+        CB3_SUB3_CORE1_RESET {
+            label = "CB3_SUB3_CORE1_RESET";
+            gpios = <&XL9555_CB3_SUB3 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U16 SUB_U40 CORE1_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB3_CORE2_RESET {
+            label = "CB3_SUB3_CORE2_RESET";
+            gpios = <&XL9555_CB3_SUB3 PCA_IO1_2 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U16 SUB_U40 CORE2_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB3_CORE3_RESET {
+            label = "CB3_SUB3_CORE3_RESET";
+            gpios = <&XL9555_CB3_SUB3 PCA_IO1_3 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U16 SUB_U40 CORE3_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        // watchdog
+        CB3_SUB3_WD_PWR_EN {
+            label = "CB3_SUB3_WD_PWR_EN";
+            gpios = <&XL9555_CB3_SUB3 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U16 SUB_U40 WD_PWR_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB3_UART_ADD_A {
+            label = "CB3_SUB3_UART_ADD_A";
+            gpios = <&XL9555_CB3_SUB3 PCA_IO1_4 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U16 SUB_U40 UART_ADD_A
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB3_UART_ADD_B {
+            label = "CB3_SUB3_UART_ADD_B";
+            gpios = <&XL9555_CB3_SUB3 PCA_IO1_5 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U16 SUB_U40 UART_ADD_B
+            default-state = "on";
+            retain-state-shutdown;
+        };
+        /*----------------------------------------------------------CB3 SUB3 CORE END----------------------------------------------------------*/
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB3) && defined(FF_XL9555_CB3_SUB4)
+        /*----------------------------------------------------------CB3 SUB4 CORE----------------------------------------------------------*/
+        /* CB3 SUB4 CORE_SYS_EN */
+        CB3_SUB4_CORE1_SYS_EN {
+            label = "CB3_SUB4_CORE1_SYS_EN";
+            gpios = <&XL9555_CB3_SUB4 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U19 SUB_U40 CORE1_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB4_CORE2_SYS_EN {
+            label = "CB3_SUB4_CORE2_SYS_EN";
+            gpios = <&XL9555_CB3_SUB4 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U19 SUB_U40 CORE2_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB4_CORE3_SYS_EN {
+            label = "CB3_SUB4_CORE3_SYS_EN";
+            gpios = <&XL9555_CB3_SUB4 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U19 SUB_U40 CORE3_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        /* CB3 SUB4 CORE_MASKROM*/
+        CB3_SUB4_CORE1_MASKROM {
+            label = "CB3_SUB4_CORE1_MASKROM";
+            gpios = <&XL9555_CB3_SUB4 PCA_IO0_6 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U19 SUB_U40 CORE1_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB4_CORE2_MASKROM {
+            label = "CB3_SUB4_CORE2_MASKROM";
+            gpios = <&XL9555_CB3_SUB4 PCA_IO0_7 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U19 SUB_U40 CORE2_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB4_CORE3_MASKROM {
+            label = "CB3_SUB4_CORE3_MASKROM";
+            gpios = <&XL9555_CB3_SUB4 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U19 SUB_U40 CORE3_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        /* CB3 SUB4 CORE_RESET*/
+        CB3_SUB4_CORE1_RESET {
+            label = "CB3_SUB4_CORE1_RESET";
+            gpios = <&XL9555_CB3_SUB4 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U19 SUB_U40 CORE1_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB4_CORE2_RESET {
+            label = "CB3_SUB4_CORE2_RESET";
+            gpios = <&XL9555_CB3_SUB4 PCA_IO1_2 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U19 SUB_U40 CORE2_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB4_CORE3_RESET {
+            label = "CB3_SUB4_CORE3_RESET";
+            gpios = <&XL9555_CB3_SUB4 PCA_IO1_3 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U19 SUB_U40 CORE3_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        // watchdog
+        CB3_SUB4_WD_PWR_EN {
+            label = "CB3_SUB4_WD_PWR_EN";
+            gpios = <&XL9555_CB3_SUB4 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U19 SUB_U40 WD_PWR_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB4_UART_ADD_A {
+            label = "CB3_SUB4_UART_ADD_A";
+            gpios = <&XL9555_CB3_SUB4 PCA_IO1_4 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U19 SUB_U40 UART_ADD_A
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB3_SUB4_UART_ADD_B {
+            label = "CB3_SUB4_UART_ADD_B";
+            gpios = <&XL9555_CB3_SUB4 PCA_IO1_5 GPIO_ACTIVE_HIGH>; // BMC_U16 CB_U19 SUB_U40 UART_ADD_B
+            default-state = "on";
+            retain-state-shutdown;
+        };
+        /*----------------------------------------------------------CB3 SUB4 CORE END----------------------------------------------------------*/
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB4)
+        CB4_USB20_HUB_EN {
+            label = "CB4_USB20_HUB_EN";
+            gpios = <&XL9555_CB4 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U21 USB20_HUB_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB1_3V3_PWR_EN {
+            label = "CB4_SUB1_3V3_PWR_EN";
+            gpios = <&XL9555_CB4 PCA_IO0_3 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U21 SUB_PWR_EN1
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB2_3V3_PWR_EN {
+            label = "CB4_SUB2_3V3_PWR_EN";
+            gpios = <&XL9555_CB4 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U21 SUB_PWR_EN2
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB3_3V3_PWR_EN {
+            label = "CB4_SUB3_3V3_PWR_EN";
+            gpios = <&XL9555_CB4 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U21 SUB_PWR_EN3
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB4_3V3_PWR_EN {
+            label = "CB4_SUB4_3V3_PWR_EN";
+            gpios = <&XL9555_CB4 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U21 SUB_PWR_EN4
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB_UART_SW1 {
+            label = "CB4_SUB_UART_SW1";
+            gpios = <&XL9555_CB4 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U21 SUB_UART_SW1
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB_UART_SW2 {
+            label = "CB4_SUB_UART_SW2";
+            gpios = <&XL9555_CB4 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U19aaa CB_U21 SUB_UART_SW2
+            default-state = "on";
+            retain-state-shutdown;
+        };
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB4) && defined(FF_XL9555_CB4_SUB1)
+        /*----------------------------------------------------------CB4 SUB1 CORE----------------------------------------------------------*/
+        /* CB4 SUB1 CORE_SYS_EN */
+        CB4_SUB1_CORE1_SYS_EN {
+            label = "CB4_SUB1_CORE1_SYS_EN";
+            gpios = <&XL9555_CB4_SUB1 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U10 SUB_U40 CORE1_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB1_CORE2_SYS_EN {
+            label = "CB4_SUB1_CORE2_SYS_EN";
+            gpios = <&XL9555_CB4_SUB1 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U10 SUB_U40 CORE2_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB1_CORE3_SYS_EN {
+            label = "CB4_SUB1_CORE3_SYS_EN";
+            gpios = <&XL9555_CB4_SUB1 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U10 SUB_U40 CORE3_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        /* CB4 SUB1 CORE_MASKROM*/
+        CB4_SUB1_CORE1_MASKROM {
+            label = "CB4_SUB1_CORE1_MASKROM";
+            gpios = <&XL9555_CB4_SUB1 PCA_IO0_6 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U10 SUB_U40 CORE1_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB1_CORE2_MASKROM {
+            label = "CB4_SUB1_CORE2_MASKROM";
+            gpios = <&XL9555_CB4_SUB1 PCA_IO0_7 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U10 SUB_U40 CORE2_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB1_CORE3_MASKROM {
+            label = "CB4_SUB1_CORE3_MASKROM";
+            gpios = <&XL9555_CB4_SUB1 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U10 SUB_U40 CORE3_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        /* CB4 SUB1 CORE_RESET*/
+        CB4_SUB1_CORE1_RESET {
+            label = "CB4_SUB1_CORE1_RESET";
+            gpios = <&XL9555_CB4_SUB1 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U10 SUB_U40 CORE1_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB1_CORE2_RESET {
+            label = "CB4_SUB1_CORE2_RESET";
+            gpios = <&XL9555_CB4_SUB1 PCA_IO1_2 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U10 SUB_U40 CORE2_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB1_CORE3_RESET {
+            label = "CB4_SUB1_CORE3_RESET";
+            gpios = <&XL9555_CB4_SUB1 PCA_IO1_3 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U10 SUB_U40 CORE3_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        // watchdog
+        CB4_SUB1_WD_PWR_EN {
+            label = "CB4_SUB1_WD_PWR_EN";
+            gpios = <&XL9555_CB4_SUB1 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U10 SUB_U40 WD_PWR_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB1_UART_ADD_A {
+            label = "CB4_SUB1_UART_ADD_A";
+            gpios = <&XL9555_CB4_SUB1 PCA_IO1_4 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U10 SUB_U40 UART_ADD_A
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB1_UART_ADD_B {
+            label = "CB4_SUB1_UART_ADD_B";
+            gpios = <&XL9555_CB4_SUB1 PCA_IO1_5 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U10 SUB_U40 UART_ADD_B
+            default-state = "on";
+            retain-state-shutdown;
+        };
+        /*----------------------------------------------------------CB4 SUB1 CORE END----------------------------------------------------------*/
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB4) && defined(FF_XL9555_CB4_SUB2)
+        /*----------------------------------------------------------CB4 SUB2 CORE----------------------------------------------------------*/
+        /* CB4 SUB2 CORE_SYS_EN */
+        CB4_SUB2_CORE1_SYS_EN {
+            label = "CB4_SUB2_CORE1_SYS_EN";
+            gpios = <&XL9555_CB4_SUB2 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U13 SUB_U40 CORE1_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB2_CORE2_SYS_EN {
+            label = "CB4_SUB2_CORE2_SYS_EN";
+            gpios = <&XL9555_CB4_SUB2 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U13 SUB_U40 CORE2_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB2_CORE3_SYS_EN {
+            label = "CB4_SUB2_CORE3_SYS_EN";
+            gpios = <&XL9555_CB4_SUB2 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U13 SUB_U40 CORE3_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        /* CB4 SUB2 CORE_MASKROM*/
+        CB4_SUB2_CORE1_MASKROM {
+            label = "CB4_SUB2_CORE1_MASKROM";
+            gpios = <&XL9555_CB4_SUB2 PCA_IO0_6 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U13 SUB_U40 CORE1_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB2_CORE2_MASKROM {
+            label = "CB4_SUB2_CORE2_MASKROM";
+            gpios = <&XL9555_CB4_SUB2 PCA_IO0_7 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U13 SUB_U40 CORE2_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB2_CORE3_MASKROM {
+            label = "CB4_SUB2_CORE3_MASKROM";
+            gpios = <&XL9555_CB4_SUB2 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U13 SUB_U40 CORE3_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        /* CB4 SUB2 CORE_RESET*/
+        CB4_SUB2_CORE1_RESET {
+            label = "CB4_SUB2_CORE1_RESET";
+            gpios = <&XL9555_CB4_SUB2 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U13 SUB_U40 CORE1_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB2_CORE2_RESET {
+            label = "CB4_SUB2_CORE2_RESET";
+            gpios = <&XL9555_CB4_SUB2 PCA_IO1_2 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U13 SUB_U40 CORE2_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB2_CORE3_RESET {
+            label = "CB4_SUB2_CORE3_RESET";
+            gpios = <&XL9555_CB4_SUB2 PCA_IO1_3 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U13 SUB_U40 CORE3_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        // watchdog
+        CB4_SUB2_WD_PWR_EN {
+            label = "CB4_SUB2_WD_PWR_EN";
+            gpios = <&XL9555_CB4_SUB2 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U13 SUB_U40 WD_PWR_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB2_UART_ADD_A {
+            label = "CB4_SUB2_UART_ADD_A";
+            gpios = <&XL9555_CB4_SUB2 PCA_IO1_4 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U13 SUB_U40 UART_ADD_A
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB2_UART_ADD_B {
+            label = "CB4_SUB2_UART_ADD_B";
+            gpios = <&XL9555_CB4_SUB2 PCA_IO1_5 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U13 SUB_U40 UART_ADD_B
+            default-state = "on";
+            retain-state-shutdown;
+        };
+        /*----------------------------------------------------------CB4 SUB2 CORE END----------------------------------------------------------*/
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB4) && defined(FF_XL9555_CB4_SUB3)
+        /*----------------------------------------------------------CB4 SUB3 CORE----------------------------------------------------------*/
+        /* CB4 SUB3 CORE_SYS_EN */
+        CB4_SUB3_CORE1_SYS_EN {
+            label = "CB4_SUB3_CORE1_SYS_EN";
+            gpios = <&XL9555_CB4_SUB3 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U16 SUB_U40 CORE1_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB3_CORE2_SYS_EN {
+            label = "CB4_SUB3_CORE2_SYS_EN";
+            gpios = <&XL9555_CB4_SUB3 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U16 SUB_U40 CORE2_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB3_CORE3_SYS_EN {
+            label = "CB4_SUB3_CORE3_SYS_EN";
+            gpios = <&XL9555_CB4_SUB3 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U16 SUB_U40 CORE3_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        /* CB4 SUB3 CORE_MASKROM*/
+        CB4_SUB3_CORE1_MASKROM {
+            label = "CB4_SUB3_CORE1_MASKROM";
+            gpios = <&XL9555_CB4_SUB3 PCA_IO0_6 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U16 SUB_U40 CORE1_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB3_CORE2_MASKROM {
+            label = "CB4_SUB3_CORE2_MASKROM";
+            gpios = <&XL9555_CB4_SUB3 PCA_IO0_7 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U16 SUB_U40 CORE2_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB3_CORE3_MASKROM {
+            label = "CB4_SUB3_CORE3_MASKROM";
+            gpios = <&XL9555_CB4_SUB3 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U16 SUB_U40 CORE3_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        /* CB4 SUB3 CORE_RESET*/
+        CB4_SUB3_CORE1_RESET {
+            label = "CB4_SUB3_CORE1_RESET";
+            gpios = <&XL9555_CB4_SUB3 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U16 SUB_U40 CORE1_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB3_CORE2_RESET {
+            label = "CB4_SUB3_CORE2_RESET";
+            gpios = <&XL9555_CB4_SUB3 PCA_IO1_2 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U16 SUB_U40 CORE2_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB3_CORE3_RESET {
+            label = "CB4_SUB3_CORE3_RESET";
+            gpios = <&XL9555_CB4_SUB3 PCA_IO1_3 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U16 SUB_U40 CORE3_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        // watchdog
+        CB4_SUB3_WD_PWR_EN {
+            label = "CB4_SUB3_WD_PWR_EN";
+            gpios = <&XL9555_CB4_SUB3 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U16 SUB_U40 WD_PWR_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB3_UART_ADD_A {
+            label = "CB4_SUB3_UART_ADD_A";
+            gpios = <&XL9555_CB4_SUB3 PCA_IO1_4 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U16 SUB_U40 UART_ADD_A
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB3_UART_ADD_B {
+            label = "CB4_SUB3_UART_ADD_B";
+            gpios = <&XL9555_CB4_SUB3 PCA_IO1_5 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U16 SUB_U40 UART_ADD_B
+            default-state = "on";
+            retain-state-shutdown;
+        };
+        /*----------------------------------------------------------CB4 SUB3 CORE END----------------------------------------------------------*/
+#endif
+
+#if defined(FF_XL9555_LED) && defined(FF_XL9555_CB4) && defined(FF_XL9555_CB4_SUB4)
+        /*----------------------------------------------------------CB4 SUB4 CORE----------------------------------------------------------*/
+        /* CB4 SUB4 CORE_SYS_EN */
+        CB4_SUB4_CORE1_SYS_EN {
+            label = "CB4_SUB4_CORE1_SYS_EN";
+            gpios = <&XL9555_CB4_SUB4 PCA_IO0_0 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U19 SUB_U40 CORE1_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB4_CORE2_SYS_EN {
+            label = "CB4_SUB4_CORE2_SYS_EN";
+            gpios = <&XL9555_CB4_SUB4 PCA_IO0_1 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U19 SUB_U40 CORE2_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB4_CORE3_SYS_EN {
+            label = "CB4_SUB4_CORE3_SYS_EN";
+            gpios = <&XL9555_CB4_SUB4 PCA_IO0_2 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U19 SUB_U40 CORE3_SYS_EN
+            default-state = "keep";
+            retain-state-shutdown;
+        };
+
+        /* CB4 SUB4 CORE_MASKROM*/
+        CB4_SUB4_CORE1_MASKROM {
+            label = "CB4_SUB4_CORE1_MASKROM";
+            gpios = <&XL9555_CB4_SUB4 PCA_IO0_6 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U19 SUB_U40 CORE1_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB4_CORE2_MASKROM {
+            label = "CB4_SUB4_CORE2_MASKROM";
+            gpios = <&XL9555_CB4_SUB4 PCA_IO0_7 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U19 SUB_U40 CORE2_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB4_CORE3_MASKROM {
+            label = "CB4_SUB4_CORE3_MASKROM";
+            gpios = <&XL9555_CB4_SUB4 PCA_IO1_0 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U19 SUB_U40 CORE3_MASKROM
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        /* CB4 SUB4 CORE_RESET*/
+        CB4_SUB4_CORE1_RESET {
+            label = "CB4_SUB4_CORE1_RESET";
+            gpios = <&XL9555_CB4_SUB4 PCA_IO1_1 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U19 SUB_U40 CORE1_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB4_CORE2_RESET {
+            label = "CB4_SUB4_CORE2_RESET";
+            gpios = <&XL9555_CB4_SUB4 PCA_IO1_2 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U19 SUB_U40 CORE2_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB4_CORE3_RESET {
+            label = "CB4_SUB4_CORE3_RESET";
+            gpios = <&XL9555_CB4_SUB4 PCA_IO1_3 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U19 SUB_U40 CORE3_RESET
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        // watchdog
+        CB4_SUB4_WD_PWR_EN {
+            label = "CB4_SUB4_WD_PWR_EN";
+            gpios = <&XL9555_CB4_SUB4 PCA_IO0_4 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U19 SUB_U40 WD_PWR_EN
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB4_UART_ADD_A {
+            label = "CB4_SUB4_UART_ADD_A";
+            gpios = <&XL9555_CB4_SUB4 PCA_IO1_4 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U19 SUB_U40 UART_ADD_A
+            default-state = "on";
+            retain-state-shutdown;
+        };
+
+        CB4_SUB4_UART_ADD_B {
+            label = "CB4_SUB4_UART_ADD_B";
+            gpios = <&XL9555_CB4_SUB4 PCA_IO1_5 GPIO_ACTIVE_HIGH>; // BMC_U19 CB_U19 SUB_U40 UART_ADD_B
+            default-state = "on";
+            retain-state-shutdown;
+        };
+        /*----------------------------------------------------------CB4 SUB4 CORE END----------------------------------------------------------*/
+#endif
+
+#ifdef FF_BUZZER
+        BUZZER_CTL {
+            label = "BUZZER_CTL";
+            gpios = <&gpio3 RK_PB1 GPIO_ACTIVE_HIGH>;
+            default-state = "off";
+            retain-state-shutdown;
+        };
+#endif
+
+#ifdef FF_UID_KEY_LED
+        UID_LED {
+            label = "UID_LED";
+            gpios = <&gpio1 RK_PB0 GPIO_ACTIVE_HIGH>;
+            default-state = "off";
+            retain-state-shutdown;
+        };
+#endif
+
+#ifdef FF_POWER_KEY_LED
+        BMC_WORK_LED_R {
+            label = "BMC_WORK_LED_R";
+            gpios = <&gpio1 RK_PB1 GPIO_ACTIVE_HIGH>;
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        BMC_WORK_LED_G {
+            label = "BMC_WORK_LED_G";
+            gpios = <&gpio1 RK_PA4 GPIO_ACTIVE_HIGH>;
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        BMC_WORK_LED_Y {
+            label = "BMC_WORK_LED_Y";
+            gpios = <&gpio1 RK_PD3 GPIO_ACTIVE_HIGH>;
+            default-state = "off";
+            retain-state-shutdown;
+        };
+#endif
+
+#ifdef FF_MCU
+        MCU_RESET {
+            label = "MCU_RESET";
+            gpios = <&gpio1 RK_PD0 GPIO_ACTIVE_HIGH>;
+            default-state = "off";
+            retain-state-shutdown;
+        };
+
+        MCU_BOOT {
+            label = "MCU_LOADER";
+            gpios = <&gpio3 RK_PA6 GPIO_ACTIVE_HIGH>;
+            default-state = "off";
+            retain-state-shutdown;
+        };
+#endif
+    };
+};

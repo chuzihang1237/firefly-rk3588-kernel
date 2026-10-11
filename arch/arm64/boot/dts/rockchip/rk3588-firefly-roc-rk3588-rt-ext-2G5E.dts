@@ -1,0 +1,106 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2023 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+#define rk3588
+
+#define FF_LEDS
+#define FF_HDMI0
+#define FF_HDMI1
+#define FF_WATCHDOG
+#define FF_SDCARD
+#define FF_TYPEC0
+#define FF_USB30
+#define FF_USB20_HOST0
+#define FF_CODEC_ES8388
+#define FF_GMAC0
+#define FF_GMAC1
+#define FF_PCIE2_1L2 // for RTL8125
+#define FF_RECOVERY_KEY
+#define FF_RTC
+
+#include "rk3588-firefly-roc-rk3588-rt.dtsi"
+
+/ {
+	model = "Firefly ROC-RK3588-RT 2G5";
+	compatible = "rockchip,roc-rk3588-rt-ext-2g5e", "rockchip,rk3588";
+
+	vcc3v3_pcie: vcc3v3-pcie {
+		status = "okay";
+		compatible = "regulator-fixed";
+		regulator-name = "vcc3v3_pcie";
+		regulator-boot-on;
+		regulator-always-on;
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		enable-active-high;
+		gpio = <&gpio1 RK_PB2 GPIO_ACTIVE_HIGH>;
+		startup-delay-us = <5000>;
+		vin-supply = <&vcc12v_dcin>;
+	};
+
+	pcie_oe1: pcie-oe1 {
+		compatible = "regulator-fixed";
+		regulator-name = "pcie_oe1";
+		enable-active-high;
+		regulator-boot-on;
+		regulator-always-on;
+		gpios = <&gpio4 RK_PB2 GPIO_ACTIVE_HIGH>;
+                vin-supply = <&vcc12v_dcin>;
+	};
+
+	pcie_oe2: pcie-oe2 {
+		compatible = "regulator-fixed";
+		regulator-name = "pcie_oe2";
+		enable-active-high;
+		regulator-boot-on;
+		regulator-always-on;
+		gpios = <&gpio4 RK_PB3 GPIO_ACTIVE_HIGH>;
+                vin-supply = <&vcc12v_dcin>;
+	};
+};
+
+/* pcie3.0x4 splits to 4 pcie3.0x1 */
+&pcie30phy {
+	rockchip,pcie30-phymode = <PHY_MODE_PCIE_NABIBI>;
+	status = "okay";
+};
+
+&pcie2x1l0{
+	phys = <&pcie30phy>;
+	reset-gpios = <&gpio1 RK_PB4 GPIO_ACTIVE_HIGH>;
+	rockchip,skip-scan-in-resume;
+	vpcie3v3-supply = <&vcc3v3_pcie>;
+	rockchip,perst-inactive-ms = <800>;
+	status = "okay";
+};
+
+&pcie2x1l1{
+	phys = <&pcie30phy>;
+	reset-gpios = <&gpio1 RK_PA7 GPIO_ACTIVE_HIGH>;
+	rockchip,skip-scan-in-resume;
+	vpcie3v3-supply = <&vcc3v3_pcie>;
+	rockchip,perst-inactive-ms = <600>;
+	status = "okay";
+};
+
+&pcie3x2 {
+	num-lanes = <1>;
+	reset-gpios = <&gpio3 RK_PD4 GPIO_ACTIVE_HIGH>;
+	vpcie3v3-supply = <&vcc3v3_pcie>;
+	rockchip,skip-scan-in-resume;
+	rockchip,perst-inactive-ms = <500>;
+	status = "okay";
+};
+
+&pcie3x4 {
+	num-lanes = <1>;
+	reset-gpios = <&gpio4 RK_PB6 GPIO_ACTIVE_HIGH>;
+	vpcie3v3-supply = <&vcc3v3_pcie>;
+	rockchip,skip-scan-in-resume;
+	rockchip,perst-inactive-ms = <700>;
+	status = "okay";
+};

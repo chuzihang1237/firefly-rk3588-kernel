@@ -1,0 +1,69 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2023 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+#define rk3588
+
+#define FF_LEDS
+#define FF_HDMI0
+#define FF_HDMI1
+#define FF_WATCHDOG
+#define FF_SDCARD
+#define FF_TYPEC0
+#define FF_USB30
+#define FF_USB20_HOST0
+#define FF_CODEC_ES8388
+#define FF_GMAC0
+#define FF_GMAC1
+#define FF_PCIE3_X4 // for 10ge ext board
+#define FF_PCIE2_1L0 // for wifi/bt
+#define FF_SATA2 // M.2 slot, mux with pcie2x1l1
+//#define FF_PCIE2_1L1 // M.2 slot, mux with sata2
+#define FF_PCIE2_1L2 // for RTL8125
+#define FF_RECOVERY_KEY
+#define FF_RTC
+#define FF_FAN
+
+#include "rk3588-firefly-roc-rk3588-rt.dtsi"
+
+/ {
+	model = "Firefly ROC-RK3588-RT 10G";
+	compatible = "rockchip,roc-rk3588-rt-ext-10ge", "rockchip,rk3588";
+
+	pcie_oe: pcie-oe {
+		compatible = "regulator-fixed";
+		regulator-name = "pcie_oe";
+		enable-active-high;
+		regulator-boot-on;
+		regulator-always-on;
+		gpios = <&gpio4 RK_PB2 GPIO_ACTIVE_HIGH>;
+		vin-supply = <&vcc12v_dcin>;
+	};
+
+	pcie10g_rst: pcie10g-rst {
+		compatible = "regulator-fixed";
+		regulator-name = "pcie10g_rst";
+		enable-active-high;
+		regulator-always-on;
+		gpios = <&gpio4 RK_PB6 GPIO_ACTIVE_HIGH>;
+		vin-supply = <&vcc12v_dcin>;
+	};
+};
+
+&fan {
+	pwms = <&pwm15 0 50000 1>;
+};
+
+&vcc3v3_pcie30{
+	gpios = <&gpio1 RK_PB2 GPIO_ACTIVE_HIGH>;
+	startup-delay-us = <5000>;
+	status = "okay";
+};
+
+&pcie3x4 {
+	reset-gpios = <&gpio1 RK_PA7 GPIO_ACTIVE_HIGH>;
+	status = "okay";
+};

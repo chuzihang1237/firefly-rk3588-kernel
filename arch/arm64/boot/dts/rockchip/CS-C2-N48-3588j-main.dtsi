@@ -1,0 +1,637 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+#include <dt-bindings/leds/common.h>
+#include "rk3588-firefly-common.dtsi"
+
+
+/ {
+#ifdef FF_PCIE
+    pcie30_clk_pwr: pcie30-clk-pwr {
+        status = "okay";
+        compatible = "regulator-fixed";
+        regulator-name = "PCIE_PWREN_H";
+        regulator-min-microvolt = <1800000>;
+        regulator-max-microvolt = <1800000>;
+        enable-active-high;
+        gpios = <&gpio4 RK_PC6 GPIO_ACTIVE_HIGH>;
+        startup-delay-us = <5000>;
+        vin-supply = <&vcc12v_dcin>;
+    };
+
+    pcie30_clk_oe: pcie30-clk-oe {
+        compatible = "regulator-fixed";
+        regulator-name = "PCIE30X4_CLKREQn_M1";
+        enable-active-low;
+        gpios = <&gpio4 RK_PB4 GPIO_ACTIVE_HIGH>;
+        regulator-min-microvolt = <3300000>;
+        regulator-max-microvolt = <3300000>;
+        vin-supply = <&pcie30_clk_pwr>;
+    };
+#endif
+
+#ifdef FF_MY18B20Z
+    my18b20z_1 {
+        compatible = "firefly,ds1820";
+        status = "okay";
+        ds1820-dq = <&gpio3 RK_PB0 GPIO_ACTIVE_LOW>; //GPIO3_B0 TEMP_DET_1
+        ds18b20-id = <1>;
+        pinctrl-names = "default";
+        pinctrl-0 = <&my18b20z_det_1_pin>;
+    };
+
+    my18b20z_2 {
+        compatible = "firefly,ds1820";
+        ds1820-dq = <&gpio3 RK_PA5 GPIO_ACTIVE_LOW>; //GPIO3_A5 TEMP_DET_2
+        ds18b20-id = <2>;
+        status = "okay";
+        pinctrl-names = "default";
+        pinctrl-0 = <&my18b20z_det_2_pin>;
+    };
+
+    my18b20z_3 {
+        compatible = "firefly,ds1820";
+        ds1820-dq = <&gpio3 RK_PB3 GPIO_ACTIVE_LOW>; //GPIO3_B3 TEMP_DET_3
+        ds18b20-id = <3>;
+        status = "okay";
+        pinctrl-names = "default";
+        pinctrl-0 = <&my18b20z_det_3_pin>;
+    };
+#endif
+
+#ifdef FF_FAN
+    fan: pwm-fan {
+		compatible = "pwm-fan";
+		#cooling-cells = <2>;
+		fan-supply = <&vcc12v_dcin>;
+		pwms = <&pwm8 0 50000 1>;
+	};
+#endif
+};
+
+&fiq_debugger{
+    rockchip,baudrate = <115200>;  /* Only 115200 and 1500000 */
+};
+
+#ifdef FF_GMAC0
+&gmac0 {
+    status = "okay";
+    snps,reset-gpio = <&gpio4 RK_PA7 GPIO_ACTIVE_LOW>;
+    tx_delay = <0x31>;
+};
+
+&gmac0_tx_bus2{
+    rockchip,pins =
+    /* gmac0_txd0 */
+    <2 RK_PB6 1 &pcfg_pull_up_drv_level_6>,
+    /* gmac0_txd1 */
+    <2 RK_PB7 1 &pcfg_pull_up_drv_level_6>,
+    /* gmac0_txen */
+    <2 RK_PC0 1 &pcfg_pull_none>;
+};
+
+&gmac0_rgmii_bus{
+    rockchip,pins =
+    /* gmac0_rxd2 */
+    <2 RK_PA6 1 &pcfg_pull_none>,
+    /* gmac0_rxd3 */
+    <2 RK_PA7 1 &pcfg_pull_none>,
+    /* gmac0_txd2 */
+    <2 RK_PB1 1 &pcfg_pull_up_drv_level_6>,
+    /* gmac0_txd3 */
+    <2 RK_PB2 1 &pcfg_pull_up_drv_level_6>;
+};
+#endif
+
+#ifdef FF_PCIE
+&pcie3x4 {
+	num-lanes = <1>;
+	reset-gpios = <&gpio4 RK_PB6 GPIO_ACTIVE_HIGH>;
+	vpcie3v3-supply = <&pcie30_clk_oe>;
+	rockchip,perst-inactive-ms = <1000>;
+	status = "okay";
+};
+
+&pcie30phy {
+    rockchip,pcie30-phymode = <PHY_MODE_PCIE_NABIBI>;
+	status = "okay";
+};
+#endif
+
+#ifdef FF_USB
+// USB30_TYPEC0
+&usbdrd3_0 {
+    status = "okay";
+};
+
+&usbdrd_dwc3_0 {
+    dr_mode = "host";
+    phys = <&u2phy0_otg>, <&usbdp_phy0_u3>;
+    status = "okay";
+};
+
+&u2phy0 {
+    status = "okay";
+};
+
+&u2phy0_otg {
+    status = "okay";
+};
+
+&usbdp_phy0 {
+    status = "okay";
+};
+
+&usbdp_phy0_u3 {
+    status = "okay";
+};
+
+// USB30_TYPEC1
+&usbdrd3_1 {
+    status = "okay";
+};
+
+&usbdrd_dwc3_1 {
+    status = "okay";
+    phys = <&u2phy1_otg>, <&usbdp_phy1_u3>;
+};
+
+&u2phy1 {
+    status = "okay";
+};
+
+&u2phy1_otg {
+    status = "okay";
+};
+
+&usbdp_phy1 {
+    status = "okay";
+};
+
+&usbdp_phy1_u3 {
+    status = "okay";
+};
+
+// USB20_HOST0
+&usb_host0_ehci {
+    status = "okay";
+};
+
+&usb_host0_ohci {
+    status = "okay";
+};
+
+&u2phy2 {
+    status = "okay";
+};
+
+&u2phy2_host {
+    status = "okay";
+};
+
+// FF_USB20_HOST1
+&usb_host1_ehci {
+    status = "okay";
+};
+
+&usb_host1_ohci {
+    status = "okay";
+};
+
+&u2phy3 {
+    status = "okay";
+};
+
+&u2phy3_host {
+    status = "okay";
+};
+#endif
+
+&i2c3 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&i2c3m4_xfer>;
+
+#ifdef FF_XL9555_CB1
+    XL9555_CB1: gpio@24 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x24>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <300>;
+    };
+#endif
+
+#if defined(FF_XL9555_CB1) && defined(FF_XL9555_CB1_SUB1)
+    XL9555_CB1_SUB1: gpio@20 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x20>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <320>;
+    };
+#endif
+
+#if defined(FF_XL9555_CB1) && defined(FF_XL9555_CB1_SUB2)
+    XL9555_CB1_SUB2: gpio@21 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x21>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <340>;
+    };
+#endif
+
+#if defined(FF_XL9555_CB1) && defined(FF_XL9555_CB1_SUB3)
+    XL9555_CB1_SUB3: gpio@22 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x22>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <360>;
+    };
+#endif
+
+#if defined(FF_XL9555_CB1) && defined(FF_XL9555_CB1_SUB4)
+    XL9555_CB1_SUB4: gpio@23 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x23>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <380>;
+    };
+#endif
+};
+
+&i2c5 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&i2c5m0_xfer>;
+
+#ifdef FF_XL9555_CB2
+    XL9555_CB2: gpio@24 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x24>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <400>;
+    };
+#endif
+
+#if defined(FF_XL9555_CB2) && defined(FF_XL9555_CB2_SUB1)
+    XL9555_CB2_SUB1: gpio@20 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x20>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <420>;
+    };
+#endif
+
+#if defined(FF_XL9555_CB2) && defined(FF_XL9555_CB2_SUB2)
+    XL9555_CB2_SUB2: gpio@21 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x21>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <440>;
+    };
+#endif
+
+#if defined(FF_XL9555_CB2) && defined(FF_XL9555_CB2_SUB3)
+    XL9555_CB2_SUB3: gpio@22 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x22>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <460>;
+    };
+#endif
+
+#if defined(FF_XL9555_CB2) && defined(FF_XL9555_CB2_SUB4)
+    XL9555_CB2_SUB4: gpio@23 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x23>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <480>;
+    };
+#endif
+};
+
+&i2c7 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&i2c7m3_xfer>;
+
+#ifdef FF_XL9555_CB3
+    XL9555_CB3: gpio@24 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x24>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <600>;
+    };
+#endif
+
+#if defined(FF_XL9555_CB3) && defined(FF_XL9555_CB3_SUB1)
+    XL9555_CB3_SUB1: gpio@20 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x20>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <620>;
+    };
+#endif
+
+#if defined(FF_XL9555_CB3) && defined(FF_XL9555_CB3_SUB2)
+    XL9555_CB3_SUB2: gpio@21 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x21>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <640>;
+    };
+#endif
+
+#if defined(FF_XL9555_CB3) && defined(FF_XL9555_CB3_SUB3)
+    XL9555_CB3_SUB3: gpio@22 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x22>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <660>;
+    };
+#endif
+
+#if defined(FF_XL9555_CB3) && defined(FF_XL9555_CB3_SUB4)
+    XL9555_CB3_SUB4: gpio@23 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x23>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <680>;
+    };
+#endif
+};
+
+&i2c8 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&i2c8m2_xfer>;
+
+#ifdef FF_XL9555_CB4
+    XL9555_CB4: gpio@24 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x24>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <700>;
+    };
+#endif
+
+#if defined(FF_XL9555_CB4) && defined(FF_XL9555_CB4_SUB1)
+    XL9555_CB4_SUB1: gpio@20 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x20>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <720>;
+    };
+#endif
+
+#if defined(FF_XL9555_CB4) && defined(FF_XL9555_CB4_SUB2)
+    XL9555_CB4_SUB2: gpio@21 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x21>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <740>;
+    };
+#endif
+
+#if defined(FF_XL9555_CB4) && defined(FF_XL9555_CB4_SUB3)
+    XL9555_CB4_SUB3: gpio@22 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x22>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <760>;
+    };
+#endif
+
+#if defined(FF_XL9555_CB4) && defined(FF_XL9555_CB4_SUB4)
+    XL9555_CB4_SUB4: gpio@23 {
+        status = "okay";
+        compatible = "nxp,pca9555";
+        reg = <0x23>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-group-num = <780>;
+    };
+#endif
+};
+
+#ifdef FF_HDMI1
+&hdmi1 {
+    enable-gpios = <&gpio4 RK_PA0 GPIO_ACTIVE_HIGH>;  //HDMI1_TX_ON_H
+    status = "okay";
+};
+
+&hdmi1_in_vp0 {
+    status = "okay";
+};
+
+&hdmi1_in_vp1 {
+    status = "disabled";
+};
+
+&i2s6_8ch {
+    status = "okay";
+};
+
+&hdptxphy_hdmi1 {
+    status = "okay";
+};
+
+&route_hdmi1{
+    status = "okay";
+    connect = <&vp0_out_hdmi1>;
+};
+#endif
+
+#ifdef FF_MCU
+&uart9 {
+	status = "okay";
+	pinctrl-0 = <&uart9m2_xfer>;
+};
+#endif
+
+#ifdef FF_FAN
+&pwm8 {
+	pinctrl-0 = <&pwm8m0_pins>;
+	status = "okay";
+};
+#endif
+
+#ifdef FF_POWER
+&i2c2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c2m0_xfer>;
+};
+#endif
+
+#ifdef FF_WATCHDOG
+&i2c1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c1m2_xfer>;
+	pc9202: pc9202@3c {
+		status = "okay";
+		compatible = "firefly,pc9202";
+		reg = <0x3c>;
+		wd-en-gpio = <&gpio0 RK_PA0 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&wdt_ctl1>;
+		driver-names = "wdtdiban";
+	};
+};
+#endif
+
+#ifdef FF_SPI_FLASH
+&spi4 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi4m1_cs0 &spi4m1_pins>;
+
+	spi_dev@0 {
+		compatible = "jedec,spi-nor";
+		reg = <0>;
+		spi-max-frequency = <45000000>;
+		spi-msb-first;
+	};
+};
+#endif
+
+#ifdef FF_RTC
+&i2c1 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&i2c1m2_xfer>;
+
+    pcf8563: pcf8563@51 {
+        status = "okay";
+        compatible = "nxp,pcf8563";
+        reg = <0x51>;
+        #clock-cells = <0>;
+        clock-frequency = <32768>;
+        clock-output-names = "pcf8563-clkout";
+        pinctrl-names = "default";
+        pinctrl-0 = <&pcf8563_int>;
+        interrupt-parent = <&gpio0>;
+        interrupts = <RK_PB2 IRQ_TYPE_LEVEL_LOW>;
+        // wakeup-source;
+    };
+};
+#endif
+
+#ifdef FF_SUB_DEBUG_UART
+&uart0 {
+	status = "okay";
+	pinctrl-0 = <&uart0m2_xfer>;
+};
+
+&uart1 {
+	status = "okay";
+	pinctrl-0 = <&uart1m1_xfer>;
+};
+
+&uart3 {
+	status = "okay";
+	pinctrl-0 = <&uart3m1_xfer>;
+};
+
+&uart4 {
+	status = "okay";
+	pinctrl-0 = <&uart4m2_xfer>;
+};
+
+&uart5 {
+	status = "okay";
+	pinctrl-0 = <&uart5m0_xfer>;
+};
+
+&uart6 {
+	status = "okay";
+	pinctrl-0 = <&uart6m1_xfer>;
+};
+
+&uart7 {
+	status = "okay";
+	pinctrl-0 = <&uart7m2_xfer>;
+};
+
+&uart8 {
+	status = "okay";
+	pinctrl-0 = <&uart8m0_xfer>;
+};
+#endif
+
+/* pinctrl */
+&pinctrl {
+#ifdef FF_MY18B20Z
+	my18b20z {
+		my18b20z_det_1_pin: my18b20z-det-1-pin {
+			rockchip,pins = <3 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>;  //GPIO3_B0
+		};
+
+		my18b20z_det_2_pin: my18b20z-det-2-pin {
+			rockchip,pins = <3 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>;  //GPIO3_A5
+		};
+
+        my18b20z_det_3_pin: my18b20z-det-3-pin {
+			rockchip,pins = <3 RK_PB3 RK_FUNC_GPIO &pcfg_pull_none>;  //GPIO3_B3
+		};
+	};
+#endif
+
+#ifdef FF_WATCHDOG
+	watchdog {
+		wdt_ctl1: wdt-ctl {
+				rockchip,pins =
+				<0 RK_PA0 RK_FUNC_GPIO &pcfg_pull_none>;            //GPIO1_C4
+		};
+	};
+#endif
+
+#ifdef FF_RTC
+    pcf8563 {
+        pcf8563_int: pcf8563-int {
+            rockchip,pins = <0 RK_PB2 RK_FUNC_GPIO &pcfg_pull_up>;
+        };
+    };
+#endif
+};

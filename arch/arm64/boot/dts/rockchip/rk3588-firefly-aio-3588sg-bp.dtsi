@@ -1,0 +1,59 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2023 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+#if defined(FF_LVDS) && !defined(FF_DSI1)
+#include "rk3588-firefly-aio-3588sg-lvds10.1-DM-M10R800.dtsi"
+#endif
+
+#include "rk3588-firefly-aio-3588sg-dcphy-cam-8ms1m.dtsi"
+
+/ {
+	dc_pwr_mode: dc-pwr-mode {
+		status = "okay";
+		compatible = "regulator-fixed";
+		regulator-name = "dc_pwr_mode";
+		regulator-boot-on;
+		regulator-always-on;
+		enable-active-high;
+		gpio = <&pca9554 PCA_IO0_7 GPIO_ACTIVE_HIGH>;
+	};
+
+	vcc12v_bp: vcc12v-bp {
+		status = "okay";
+		compatible = "regulator-fixed";
+		regulator-name = "vcc12v_bp";
+		regulator-boot-on;
+		regulator-always-on;
+		enable-active-high;
+		gpio = <&gpio1 RK_PB3 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+&i2c0 {
+	status = "okay";
+	pinctrl-0 = <&i2c0m2_xfer>;
+
+	pca9554: pca9554@20 {
+		status = "okay";
+		compatible = "nxp,pca9554";
+		reg = <0x20>;
+		gpio-controller;
+		#gpio-cells = <2>;
+		gpio-group-num = <180>;
+	};
+};
+
+&uart0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart0m2_xfer>;
+};
+
+&uart3 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart3m2_xfer>;
+};

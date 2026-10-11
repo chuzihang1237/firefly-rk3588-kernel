@@ -1,0 +1,148 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+&i2c8 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c8m4_xfer>;
+
+	IMX415_1: IMX415-1@37 {
+		compatible = "sony,imx415";
+		reg = <0x37>;
+		clocks = <&cru CLK_MIPI_CAMARAOUT_M3>;
+		clock-names = "xvclk";
+		pinctrl-names = "default";
+		pinctrl-0 = <&mipim0_camera3_clk>;
+		power-domains = <&power RK3588_PD_VI>;
+
+		reset-gpios = <&gpio2 RK_PC5 GPIO_ACTIVE_LOW>;
+
+		firefly,clkout-enabled-index = <1>;
+		rockchip,camera-module-index = <1>;
+		rockchip,camera-module-facing = "back";
+		rockchip,camera-module-name = "CMK-OT2022-PX1";
+		rockchip,camera-module-lens-name = "IR0147-50IRC-8M-F20";
+
+		port {
+			imx415_out1: endpoint {
+				remote-endpoint = <&mipidphy3_in_ucam1>;
+				data-lanes = <1 2 3 4>;
+			};
+		};
+	};
+};
+
+&csi2_dphy1_hw { 
+	status = "okay";
+};
+
+
+&csi2_dphy3 {
+	status = "okay";
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		port@0 {
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			mipidphy3_in_ucam1: endpoint@1 {
+				reg = <1>;
+				remote-endpoint = <&imx415_out1>;
+				data-lanes = <1 2 3 4>;
+			};
+		};
+		port@1 {
+			reg = <1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			csidphy3_out: endpoint@1 {
+				reg = <1>;
+				remote-endpoint = <&mipi4_csi2_input>;
+			};
+		};
+	};
+};
+
+&mipi4_csi2 {
+	status = "okay";
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		port@0 {
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			mipi4_csi2_input: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&csidphy3_out>;
+			};
+		};
+
+		port@1 {
+			reg = <1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			mipi4_csi2_output: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&cif_mipi4_in0>;
+			};
+		};
+	};
+};
+
+&rkcif_mipi_lvds4 {
+	status = "okay";
+	port {
+		cif_mipi4_in0: endpoint {
+			remote-endpoint = <&mipi4_csi2_output>;
+		};
+	};
+};
+
+&rkcif_mipi_lvds4_sditf {
+        status = "okay";
+        port {
+                mipi_lvds4_sditf: endpoint {
+                        remote-endpoint = <&isp1_vir0>;
+                };
+        };
+};
+
+&rkisp1 {
+        status = "okay";
+};
+
+&isp1_mmu {
+        status = "okay";
+};
+
+&rkisp1_vir0 {
+        status = "okay";
+        port {
+                #address-cells = <1>;
+                #size-cells = <0>;
+                isp1_vir0: endpoint@0 {
+                        reg = <0>;
+                        remote-endpoint = <&mipi_lvds4_sditf>;
+                };
+        };
+};
+
+&rkcif {
+	status = "okay";
+};
+
+&rkcif_mmu {
+	status = "okay";
+};
+
+
+

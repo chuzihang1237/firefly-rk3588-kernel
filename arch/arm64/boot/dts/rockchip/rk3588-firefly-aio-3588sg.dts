@@ -1,0 +1,57 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2023 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+
+#define FF_LEDS
+#define FF_FAN
+#define FF_SDCARD
+#define FF_TYPEC0
+#define FF_USB20_HOST0
+#define FF_USB30_HOST
+#define FF_GMAC1
+#define FF_PCIE2_1L2 // for wifibt
+#define FF_WIFIBT
+#define FF_CODEC_ES8388
+#define FF_RTC
+#define FF_PCA9555
+#define FF_DP0
+#define FF_DSI1
+//#define FF_EDP0
+#define FF_GSENSOR
+#define FF_CAN2
+#define FF_CAMERA
+//#define FF_BP // expansion board
+
+#include "rk3588-firefly-aio-3588sg.dtsi"
+
+#ifdef FF_BP
+//#define FF_LVDS
+#include "rk3588-firefly-aio-3588sg-bp.dtsi"
+#else
+#define FF_I2C8
+#define FF_UART // uart0 uart3 uart4 uart5
+#define FF_SPI0
+#endif
+
+#if defined(FF_DSI1) && defined(FF_PCA9555)
+#include "rk3588-firefly-aio-3588sg-mipi101-BSD1218-A101KL68.dtsi" // 10.1 inch mipi-dsi display
+#endif
+
+#if defined(FF_EDP0) && defined(FF_PCA9555)
+#include "rk3588-firefly-aio-3588sg-edp-NE156QUM-N66.dtsi" // 15.6 inch edp display
+#endif
+
+#ifdef FF_CAMERA
+// choose only one camera, DO NOT INCLUDE BOTH
+#include "rk3588-firefly-aio-3588sg-cam-8ms1m.dtsi"  // XC7160
+//#include "rk3588-firefly-aio-3588sg-cam-imx415.dtsi" // IMX415
+#endif
+
+/ {
+	model = "Firefly AIO-3588SG";
+	compatible = "rockchip,aio-3588sg", "rockchip,rk3588";
+};

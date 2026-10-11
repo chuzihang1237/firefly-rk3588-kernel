@@ -1,0 +1,22 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2023 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+
+#define FF_GMAC1
+#define FF_PCIE2_1L2
+#define FF_TYPEC_USB20_ONLY
+#define FF_UID_LED
+#define FF_RTC
+#define FF_WATCHDOG
+#define FF_POSITION
+
+#include "CS-B1-N10-SUB-aio-3588sjd4-ai.dtsi"
+
+/ {
+	model = "Firefly CS-B1-N10-SUB AIO-3588SJD4-AI Board";
+	compatible = "rockchip,aio-3588sjd4-ai", "rockchip,rk3588";
+};

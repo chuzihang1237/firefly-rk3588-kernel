@@ -1,0 +1,48 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+#define FF_HDMI0
+#define FF_SDCARD
+#define FF_RECOVERY_KEY
+#define FF_GMAC1
+#define FF_FAN
+#define FF_RTC
+#define FF_LEDS
+#define FF_USB20_HOST0
+#define FF_USB20_HOST1
+#define FF_USB30
+#define FF_TYPEC_FULL
+#define FF_WATCHDOG
+
+
+#define USB3_OR_M2_SLOT 1 /* 1 = USB3 , 0 = M2_SLOT */
+#define M2_SATA_OR_PCIE 0 /* 1 = SATA , 0 = PCIe */
+
+#if !USB3_OR_M2_SLOT
+
+#if M2_SATA_OR_PCIE
+
+// m.2 slot use sata
+#define FF_SATA2
+
+#else
+
+// m.2 slot use pcie
+#define FF_PCIE2_1L1
+
+#endif
+
+#endif
+
+#define TYPEC_OTG_20 0 /*1 = OTG , 0 = HOST */
+
+#include "rk3588-firefly-aibox-3588s.dtsi"
+
+/ {
+	model = "Firefly AIBOX-3588S";
+	compatible = "rockchip,aibox-3588s", "rockchip,rk3588";
+};

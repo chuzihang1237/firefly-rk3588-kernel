@@ -1,0 +1,54 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2023 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+
+#define rk3588
+#define FF_GMAC0
+#define FF_PCIE
+#define FF_POWER
+#define FF_USB
+#define FF_HDMI1
+#define FF_BUZZER
+#define FF_MY18B20Z
+#define FF_UID_KEY_LED
+#define FF_POWER_KEY_LED
+#define FF_MCU
+#define FF_FAN
+#define FF_WATCHDOG
+#define FF_SPI_FLASH
+#define FF_RTC
+#define FF_SUB_DEBUG_UART
+
+#define FF_XL9555_CB1
+#define FF_XL9555_CB1_SUB1
+#define FF_XL9555_CB1_SUB2
+#define FF_XL9555_CB1_SUB3
+#define FF_XL9555_CB1_SUB4
+#define FF_XL9555_CB2
+#define FF_XL9555_CB2_SUB1
+#define FF_XL9555_CB2_SUB2
+#define FF_XL9555_CB2_SUB3
+#define FF_XL9555_CB2_SUB4
+#define FF_XL9555_CB3
+#define FF_XL9555_CB3_SUB1
+#define FF_XL9555_CB3_SUB2
+#define FF_XL9555_CB3_SUB3
+#define FF_XL9555_CB3_SUB4
+#define FF_XL9555_CB4
+#define FF_XL9555_CB4_SUB1
+#define FF_XL9555_CB4_SUB2
+#define FF_XL9555_CB4_SUB3
+#define FF_XL9555_CB4_SUB4
+// #define FF_XL9555_LED
+
+#include "CS-C2-N48-3588j-main.dtsi"
+#include "CS-C2-N48-3588j-main-leds.dtsi"
+
+/ {
+	model = "Firefly CS-C2-N48-RK3588-MAIN Board";
+	compatible = "rockchip,core-3588j", "rockchip,rk3588";
+};

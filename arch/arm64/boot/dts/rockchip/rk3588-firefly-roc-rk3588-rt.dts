@@ -1,0 +1,33 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2023 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+#define rk3588
+
+#define FF_LEDS
+#define FF_HDMI0
+#define FF_HDMI1
+#define FF_WATCHDOG
+#define FF_SDCARD
+#define FF_TYPEC0
+#define FF_USB30
+#define FF_USB20_HOST0
+#define FF_CODEC_ES8388
+#define FF_GMAC0
+#define FF_GMAC1
+#define FF_PCIE2_1L0 // for wifi/bt
+#define FF_SATA2 // M.2 slot, mux with pcie2x1l1
+//#define FF_PCIE2_1L1 // M.2 slot, mux with sata2
+#define FF_PCIE2_1L2 // for RTL8125
+#define FF_RECOVERY_KEY
+#define FF_RTC
+
+#include "rk3588-firefly-roc-rk3588-rt.dtsi"
+
+/ {
+	model = "Firefly ROC-RK3588-RT";
+	compatible = "rockchip,roc-rk3588-rt", "rockchip,rk3588";
+};

@@ -1,0 +1,86 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2023 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+
+#define FF_LEDS
+#define FF_FAN
+#define FF_HDMI0
+#define FF_DSI0
+//#define FF_DSI1
+#define FF_SDCARD
+#define FF_TYPEC0
+#define FF_USB30
+#define FF_USB20_HOST0
+#define FF_USB20_HOST1
+#define FF_CODEC_ES8388
+#define FF_GMAC1
+#define FF_SATA0 // M.2 slot, mux with pcie2x1l2
+//#define FF_PCIE2_1L2 // M.2 slot, mux with sata0
+#define FF_RECOVERY_KEY
+#define FF_RTC
+
+#include "rk3588-firefly-roc-rk3588s-pc.dtsi"
+#include "rk3588-firefly-roc-rk3588s-pc-mipi101-BSD1218-A101KL68.dtsi" // 10.1 inch mipi touchscreen
+#include "rk3588-firefly-roc-rk3588s-pc-cam-8ms1m.dtsi" // Use 8MS1M (800w px camera x 1)
+//#include "rk3588-firefly-roc-rk3588s-pc-cam-2ms2mf.dtsi" // Or use 2MS1MF (200w px camera x 2)
+
+/ {
+	model = "Firefly ROC-RK3588S-PC";
+	compatible = "rockchip,roc-rk3588s-pc", "rockchip,rk3588";
+
+	vcc3v8_4g: vcc3v8-4g {
+		compatible = "firefly,gl3321g-gpio";
+		firefly-mdelay = <100>;
+		firefly-gl3321g-gpio = <&gpio3 RK_PD3 GPIO_ACTIVE_HIGH>;
+		status = "okay";
+	};
+};
+
+&firefly_leds {
+	ext_yellow_led: ext_led1 {
+		label = ":ext-yellow";
+		default-state = "off";
+		gpios = <&gpio3 RK_PB7 GPIO_ACTIVE_HIGH>;
+	};
+
+	ext_green_led: ext_led2 {
+		label = ":ext-green";
+		default-state = "off";
+		gpios = <&gpio3 RK_PC1 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+&spi1 {
+	status = "okay";
+	max-freq = <48000000>;
+	dev-port = <0>;
+	pinctrl-0 = <&spi1m2_pins>;
+	num-cs = <1>;
+
+	spi_wk2xxx: spi_wk2xxx@0{
+		status = "okay";
+		compatible = "firefly,spi-wk2xxx";
+		reg = <0x00>;
+		spi-max-frequency = <10000000>;
+		reset-gpio = <&gpio3 RK_PA6 GPIO_ACTIVE_HIGH>;
+		irq-gpio = <&gpio3 RK_PC6 IRQ_TYPE_EDGE_FALLING>;
+		cs-gpio = <&gpio1 RK_PD3 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+&can2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&can2m0_pins>;
+};
+
+&led_pins {
+	rockchip,pins = <1 RK_PD3 RK_FUNC_GPIO &pcfg_pull_none>,
+			<1 RK_PD2 RK_FUNC_GPIO &pcfg_pull_none>,
+			<3 RK_PB7 RK_FUNC_GPIO &pcfg_pull_none>,
+			<3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
+};

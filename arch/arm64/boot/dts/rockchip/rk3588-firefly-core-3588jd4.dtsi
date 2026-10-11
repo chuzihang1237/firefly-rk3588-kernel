@@ -1,0 +1,140 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2022 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+#include "rk3588-firefly-common.dtsi"
+
+/ {
+
+	   pcie_clk1: pcie-clk1 {
+                       compatible = "regulator-fixed";
+                       regulator-name = "pcie_clk1";
+                       regulator-boot-on;
+                       regulator-always-on;
+                       gpios = <&gpio3 RK_PC5 GPIO_ACTIVE_LOW>;
+                       vin-supply = <&vcc12v_dcin>;
+                       status = "okay";
+       };
+
+	   pcie_clk2: pcie-clk2 {
+                       compatible = "regulator-fixed";
+                       regulator-name = "pcie_clk2";
+                       regulator-boot-on;
+                       regulator-always-on;
+                       gpios = <&gpio3 RK_PC6 GPIO_ACTIVE_LOW>;
+                       status = "okay";
+       };
+
+	   pcie_clk3: pcie-clk3 {
+                       compatible = "regulator-fixed";
+                       regulator-name = "pcie_clk3";
+                       regulator-boot-on;
+                       regulator-always-on;
+                       gpios = <&gpio1 RK_PB1 GPIO_ACTIVE_LOW>;
+                       status = "okay";
+       };
+
+};
+
+&i2c0 {
+	pinctrl-0 = <&i2c0m2_xfer>;
+#ifdef FF_WDT_CORE
+	pc9202@3c {
+		status = "okay";
+		compatible = "firefly,pc9202";
+		reg = <0x3c>;
+		index = <0>;
+		wd-en-gpio = <&gpio2 RK_PC5 GPIO_ACTIVE_HIGH>;
+		driver-names = "wdt_core";
+	};
+#endif
+
+#ifdef FF_RTC_CORE
+	hym8563: hym8563@51 {
+		status = "okay";
+		compatible = "haoyu,hym8563";
+		reg = <0x51>;
+		#clock-cells = <0>;
+		clock-frequency = <32768>;
+		clock-output-names = "hym8563";
+		pinctrl-names = "default";
+		pinctrl-0 = <&hym8563_int>;
+		interrupt-parent = <&gpio0>;
+		interrupts = <RK_PB0 IRQ_TYPE_LEVEL_LOW>;
+		wakeup-source;
+	};
+#endif
+};
+
+#ifdef FF_GMAC0
+&gmac0 {
+	status = "okay";
+	snps,reset-gpio = <&gpio4 RK_PA2 GPIO_ACTIVE_LOW>;
+	tx_delay = <0x31>;
+};
+
+&gmac0_tx_bus2{
+    rockchip,pins =
+    /* gmac0_txd0 */
+    <2 RK_PB6 1 &pcfg_pull_up_drv_level_6>,
+    /* gmac0_txd1 */
+    <2 RK_PB7 1 &pcfg_pull_up_drv_level_6>,
+    /* gmac0_txen */
+    <2 RK_PC0 1 &pcfg_pull_none>;
+};
+
+&gmac0_rgmii_bus{
+        rockchip,pins =
+        /* gmac0_rxd2 */
+        <2 RK_PA6 1 &pcfg_pull_none>,
+        /* gmac0_rxd3 */
+        <2 RK_PA7 1 &pcfg_pull_none>,
+        /* gmac0_txd2 */
+        <2 RK_PB1 1 &pcfg_pull_up_drv_level_6>,
+        /* gmac0_txd3 */
+        <2 RK_PB2 1 &pcfg_pull_up_drv_level_6>;
+};
+#endif
+
+#ifdef FF_GMAC1
+&gmac1 {
+        snps,reset-gpio = <&gpio4 RK_PB0 GPIO_ACTIVE_LOW>;
+        tx_delay = <0x40>;
+        status = "okay";
+};
+
+&gmac1_tx_bus2{
+        rockchip,pins =
+        /* gmac1_txd0 */
+        <3 RK_PB3 1 &pcfg_pull_up_drv_level_6>,
+    /* gmac1_txd1 */
+        <3 RK_PB4 1 &pcfg_pull_up_drv_level_6>,
+        /* gmac1_txen */
+        <3 RK_PB5 1 &pcfg_pull_none>;
+};
+
+&gmac1_rgmii_bus{
+        rockchip,pins =
+        /* gmac1_rxd2 */
+        <3 RK_PA2 1 &pcfg_pull_none>,
+        /* gmac1_rxd3 */
+        <3 RK_PA3 1 &pcfg_pull_none>,
+        /* gmac1_txd2 */
+        <3 RK_PA0 1 &pcfg_pull_up_drv_level_6>,
+        /* gmac1_txd3 */
+        <3 RK_PA1 1 &pcfg_pull_up_drv_level_6>;
+};
+#endif
+
+/* pinctrl */
+&pinctrl {
+#ifdef FF_RTC_CORE
+ 	hym8563 {
+		hym8563_int: hym8563-int {
+			rockchip,pins = <0 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+#endif
+};

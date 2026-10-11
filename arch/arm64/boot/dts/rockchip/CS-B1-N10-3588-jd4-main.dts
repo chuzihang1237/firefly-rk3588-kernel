@@ -1,0 +1,39 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2023 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+/dts-v1/;
+
+#define FF_HW_VERSION_V11
+#define rk3588
+#define FF_LEDS
+#define FF_KEYS
+#define FF_COOL
+// #define FF_PCIE
+#define FF_SATA
+#define FF_RS485
+#define FF_UART
+#define FF_HDMI0
+#define FF_SDCARD
+#define FF_PCA953X
+#define FF_USB
+#define FF_USB_OTG
+#define FF_DS18B20
+#define FF_GMAC1
+#define FF_GMAC0
+#define FF_RTC
+#define FF_OTHER
+#define FF_WK2XXX
+#define FF_SPI_FLASH
+#define FF_SUB_CORE_PCA953X
+#define FF_WATCHDOG
+
+#include "CS-B1-N10-3588-jd4-main.dtsi"
+#include "CS-B1-N10-3588-jd4-main-EDPtoVGA_LT8711V.dtsi"
+
+/ {
+	model = "Firefly CS-B1-N10-RK3588-MAIN Board";
+	compatible = "rockchip,aio-3588jd4", "rockchip,rk3588";
+};
